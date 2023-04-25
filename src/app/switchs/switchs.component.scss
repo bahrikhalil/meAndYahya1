@@ -1,0 +1,204 @@
+.panel-header{
+    width: 800px; /* Set the desired width */
+    padding: 4px 8px; /* Adjust padding as needed */
+    margin: 0; /* Remove any margin */
+    box-sizing: border-box; /* Make sure padding and border are included in the width */
+    
+  }
+
+  .list-item {
+    cursor: pointer;
+   
+  }
+  
+  .list-item:hover,
+  .list-item:checked {
+    background-color: black;
+    color: white;
+  }
+
+  .main {
+    margin: 20px auto;
+    width: 80%;
+    text-align: center;
+  }
+  
+  .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modify-config-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 
+  
+  }
+  .loading-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  
+  .loading {
+    text-align: center;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #fff;
+    
+  }
+  .spinner-animation {
+    animation: rotate 1s linear infinite;
+  }
+ 
+  
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  nav {
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: rgb(2, 146, 35);
+    color: #fff;
+  }
+  
+  .brand-logo {
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-links li {
+    margin-left: 1rem;
+  }
+  
+  .nav-links a {
+    font-size: 1.2rem;
+    color: inherit;
+    text-decoration: none;
+  }
+  .navbar {
+    background-color: rgb(54, 60, 47);
+    color: #fff;
+    height: 100%;
+    width: 320px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    
+    display: flex;
+  }
+  
+  .mat-expansion-panel-header {
+    font-size: 18px;
+    
+    letter-spacing: 1px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .mat-list-item {
+    height: 48px;
+  }
+  
+  .mat-list-item .mat-icon {
+    color: #fff;
+    margin-right: 10px;
+  }
+  
+  .mat-expansion-panel-content {
+    background-color: #666;
+    color: #fff;
+  }
+  
+  .spacer {
+    flex: 1 1 auto;
+  }
+  .but{
+    font-size: large;
+    
+  }
+  .mat-toolbar{
+      background-color: rgb(117, 9, 9);
+  }
+  
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 8px;
+    margin-right: 200px;
+    margin-left: 10px;
+    margin-bottom: 20px;
+    height: 500px;
+    box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.2);
+    
+  }
+  
+  .switch-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  
+    span {
+      margin-right: 10px;
+    }
+  }
+  
+  .action-container {
+    display: flex;
+  
+    button {
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      margin-right: 10px;
+      background-color: #fff;
+      color: #333;
+      cursor: pointer;
+    }
+  
+    .accept {
+      background-color: #fff;
+      color: #333;
+    }
+  
+    .deny {
+      background-color: #fff;
+      color: #333;
+    }
+  
+    .accept.active {
+      background-color: red;
+      color: #fff;
+    }
+  
+    .deny.active {
+      background-color: red;
+      color: #fff;
+    }
+  }

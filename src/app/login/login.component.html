@@ -1,0 +1,79 @@
+<div class="page-holder align-items-center py-4 bg-gray-100 vh-100">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 px-lg-4"  *ngIf="userlogin">
+          <div class="card">
+            <div class="card-header px-lg-5">
+              <div class="card-heading text-primary" style="font-size: 30px; padding-left:100px; "> Login</div>
+            </div>
+            <div class="card-body p-lg-5">
+              <h3 class="mb-4">Hi, welcome  👋👋</h3>
+              <form id="loginForm" action="index.html"[formGroup] = "formdata">
+                <div class="form-floating mb-3">
+                  <input class="form-control" id="floatingInput" formControlName="email" type="email" placeholder="name@example.com" required>
+                  <label for="floatingInput">Email address</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input class="form-control" formControlName = "password" id="floatingPassword" type="password" placeholder="Password" required>
+                  <label for="floatingPassword">Password</label>
+                </div>
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                  <label class="form-check-label" for="remember">Remember me</label>
+                </div>
+                <button class="btn btn-primary" type="button" (click)="onClickSubmit(formdata.value)">Submit</button>
+              </form>
+            </div>
+            <div class="card-footer px-lg-5 py-lg-4">
+              <div class="text-sm text-muted">Don't have an account? <a (click)="user_register()">Register</a>.</div>
+            </div>
+          </div>
+        </div>
+       
+        <!-- register -->
+         <div class="col-lg-6 px-lg-4" *ngIf="userregister">
+          <div class="card">
+            <div class="card-header px-lg-5">
+              <div class="card-heading text-primary" style="font-size: 30px; padding-left:100px; "> Register</div>
+            </div>
+            <div class="card-body p-lg-5">
+              <form action="index.html" [formGroup] = "form">
+                <div class="form-floating mb-3">
+                  <input class="form-control" id="username" formControlName="name" type="text" placeholder="foullen" required>
+                  <label for="username">Name</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input class="form-control" id="floatingInput" formControlName="email" type="email" placeholder="name@example.com" required>
+                  <label for="floatingInput">Email address</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input class="form-control" id="floatingPassword" formControlName="password" type="password" placeholder="Password" required>
+                  <label for="floatingPassword">Password</label>
+                </div>
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="checkbox" name="agree" id="agree">
+                  <label class="form-check-label" for="agree">I agree with the <a href="#">Terms & Conditions</a>.</label>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary" id="register" type="button" name="registerSubmit"(click)="register(form.value)">Register</button>
+                </div>
+              </form>
+            </div>
+            <div class="card-footer px-lg-5 py-lg-4">
+              <div class="text-sm text-muted">Already have an account? <a (click)="user_login()">Login</a>.</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-xl-5 ms-xl-auto px-lg-4 text-center text-primary"><img class="img-fluid mb-4" width="300" src="https://therichpost.com/wp-content/uploads/2021/06/login_page_image.png" alt="" style="transform: rotate(10deg)">
+          <h1> Welcome</h1>
+         <p> It is a plaisir  to join  you  with us aaaa   </p>    
+      </div>
+         
+      </div>
+    </div>
+  </div>
+  <div class="loading-wrapper" *ngIf="myLoading" >
+    <div *ngIf="myLoading" class="loading">
+      <mat-progress-spinner class="spinner-animation" color="primary" mode="indeterminate"></mat-progress-spinner>
+    </div>
+  </div>

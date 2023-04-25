@@ -1,0 +1,81 @@
+
+
+    <mat-sidenav-container>
+      <mat-sidenav-content>
+        <mat-toolbar>
+          <span>My Application</span>
+          <div class="spacer"></div>
+          <a mat-button class="but" routerLink="/switchs">Switches</a>
+          <a mat-button class="but" routerLink="/firewalls">Firewalls</a>
+        </mat-toolbar>
+        <form *ngIf="contentList[0]==1">
+          <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div>
+            <label for="status">Status:</label>
+            <div class="switch-container">
+              <span>Off</span>
+              <mat-slide-toggle name="status"></mat-slide-toggle>
+              <span>On</span>
+            </div>
+          </div>
+          <div>
+            <label for="action">Action:</label>
+            <div class="action-container">
+              <button type="button" class="accept" (click)="onAcceptClick()">Accept</button>
+              <button type="button" class="deny" (click)="onDenyClick()">Deny</button>
+            </div>
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+        <div *ngIf="contentList[1]==1" id="network" style="background-color: black; max-height: 660px; width: 99%;" > </div>
+      
+        <div class="loading-wrapper" *ngIf="myLoading" >
+          <div *ngIf="myLoading" class="loading">
+            <mat-progress-spinner class="spinner-animation" color="primary" mode="indeterminate"></mat-progress-spinner>
+          </div>
+        </div>
+      </mat-sidenav-content>
+    <mat-sidenav opened mode="side" class="navbar">
+      <div *ngFor="let site of sites">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="pannel-header" (click)="panelOpen = !panelOpen">  
+            <a  (click)="showSiteHosts(site)">{{site}}</a>
+          </mat-expansion-panel-header>
+          <div *ngFor="let item of siteHosts[site]">
+            <label class="list-item">
+            <input type="checkbox"  (change)="onItemSelect($event, item)"> {{ item }}
+          </label>
+          </div>
+          <div *ngIf="itemSelected">
+            <button type="button" (click)="showIndividuals()" > Edit selected switchs </button>
+          </div>
+        </mat-expansion-panel>
+      </div>
+      <button class="btn btn-outline-success" type="button" (click)="createReport(hosts)">create report</button>
+      <br>
+      <button class="btn btn-outline-success" type="button" (click)="setGlobalConfig('ip source-route',hosts)">set</button>
+      <br>
+      <button class="btn btn-outline-success" type="button" (click)="networkTopology()">show topologie</button>
+      <br>
+      <button class="btn btn-outline-success" type="button" (click)="changeContent(0)">add vlan</button>
+      <br>
+      <button class="btn btn-outline-success" type="button" (click)="addDevice(hosts)">add device</button>
+      
+       
+    </mat-sidenav>
+  </mat-sidenav-container>
+   
+
+
+  
+
+  
+  
+  

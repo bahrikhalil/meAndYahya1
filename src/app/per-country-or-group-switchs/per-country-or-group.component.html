@@ -1,0 +1,530 @@
+<div style="display: flex;">
+  <div style="background-color: brown; max-height: 660px; max-width: 40%; " >
+    <div>
+        <p >{{country}}</p>
+    </div>
+    <div>
+      <mat-accordion *ngFor="let hostName of shownHosts">
+        <mat-expansion-panel>   
+          <mat-expansion-panel-header class="pannel-header" (click)="panelOpen = !panelOpen" >   
+            <a  >{{hostName}}</a>
+          </mat-expansion-panel-header >
+          <div>
+            <mat-accordion >
+              <mat-expansion-panel>   
+                <mat-expansion-panel-header class="pannel-header" (click)="panelOpen = !panelOpen" (click)="onHostClickShowVlans(hostName)">   
+                  <a  >Show Vlans Info</a>
+                </mat-expansion-panel-header>
+                <div class="container">
+                  <div class="row" style="padding-top: 100px;">       
+                    <div class="col-20 col-md-12 col-sm-30 col-lg-40">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th scope="col">id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">status</th>
+                            <th scope="col">ports</th>
+                          </tr>
+                        </thead>
+                        <tr *ngFor ="let curr of currVlanInfo">
+                          <td>{{curr.id}}</td>
+                          <td>{{curr.name}}</td>
+                          <td>{{curr.status}} </td>
+                          <td>{{curr.ports}}</td>
+                        
+                        </tr>
+                        
+                      </table> 
+                     </div> 
+                   </div> 
+                </div> 
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+          <div>
+            <mat-accordion >
+              <mat-expansion-panel>   
+                <mat-expansion-panel-header class="pannel-header" (click)="panelOpen = !panelOpen" (click)="onHostClickShowInt(hostName)">   
+                  <a  >Show Interfaces Info</a>
+                </mat-expansion-panel-header>
+                <div class="container">
+                  <div class="row" style="padding-top: 100px;">       
+                    <div class="col-20 col-md-12 col-sm-30 col-lg-40">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th scope="col">intName</th>
+                            <th scope="col">ipv4</th>
+                            <th scope="col">status</th>
+                            <th scope="col">lineProtocol</th>
+                            <th scope="col">mode</th>
+                            <th scope="col">allowedVlans</th>
+    
+                          </tr>
+                        </thead>
+                        <tr *ngFor ="let curr1 of currIntInfo">
+                          
+                          <td>{{curr1.intName}}</td>
+                          <td>{{curr1.ipv4}} </td>
+                          <td>{{curr1.status}}</td>
+                          <td>{{curr1.lineProtocol}}</td>
+                          <td>{{curr1.portType}}</td>
+                          <td>{{curr1.allowedVlans}}</td>
+                        
+                        </tr>
+                        
+                      </table> 
+                    </div> 
+                  </div> 
+                </div> 
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    
+    
+    <div >
+      <button class="btn btn-outline-success" type="button" (click)="onPopAddVlanInt()">Add Vlan interface</button>
+      <div class="overlay" *ngIf="popupaddvlanint">
+        <div class="popup" style="width: 1230px">
+            <a class="close" (click)="popupaddvlanint = false">&times;</a>
+            <div class="content">
+          <div class="page-holder align-items-center py-7 bg-gray-100 vh-100">
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-lg-6 px-lg-4" >
+                  <div class="card">
+                    <div class="card-body p-lg-5">
+                      <form id="loginForm" action="index.html"[formGroup] = "formdata" >
+                        <div class="form-floating mb-3">
+                          <input class="form-control" id="floatingInput" formControlName="ipAddress" type="text" placeholder=" " required>
+                          <label for="floatingInput">ipAddress</label>
+                        </div>
+                        
+                        <br>
+                        <div class="form-floating mb-3">
+                          <input class="form-control" formControlName = "subnet" id="floatingPassword" type="text" placeholder=" " required>
+                          <label for="floatingPassword">subnet</label>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="form-floating mb-3">
+                          <input class="form-control" formControlName = "vlanId" id="floatingPassword" type="text" placeholder=" " required>
+                          <label for="floatingPassword">vlanId</label>
+                        </div>
+                        <br>
+                        <br>
+                        <button class="btn btn-primary" type="button"(click)="onSaveAddVlanInt(formdata.value)" >Save</button>
+                      </form>
+                    </div>
+                    <br>
+                
+                    
+                  </div>
+                </div>		</div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    
+    
+    <div  >
+      <button class="btn btn-outline-success"  type="button" (click)="onPopDelVlanInt()">Delete Vlan interface</button>
+      <div class="overlay" *ngIf="popupdelvlanint">
+        <div class="popup" style="width: 1230px" >
+            <a class="close" (click)="popupdelvlanint = false">&times;</a>
+            <div class="content">
+          <div class="page-holder align-items-center py-7 bg-gray-100 vh-100">
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-lg-6 px-lg-4" >
+                  <div class="card">
+                    <div class="card-body p-lg-5">
+                      <form id="loginForm" action="index.html"[formGroup] = "formdata" >
+              
+                        <div class="form-floating mb-3">
+                          <input class="form-control" formControlName = "vlanId" id="floatingPassword" type="text" placeholder=" " required>
+                          <label for="floatingPassword">vlanId</label>
+                        </div>
+                        <br>
+                        <br>
+                        <button class="btn btn-primary" type="button"(click)="onSaveDelVlanInt(formdata.value)" >Save</button>
+                      </form>
+                    </div>
+                    <br>
+                
+                    
+                  </div>
+                </div>		</div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    
+    <div>
+      <button class="btn btn-outline-success" type="button" (click)="onPopAddVlan()" >Add Vlan </button>
+      <div class="overlay" *ngIf="popupaddvlan">
+        <div class="popup" style="width: 1230px;">
+            <a class="close" (click)="popupaddvlan = false">&times;</a>
+            <div class="content">
+          <div class="page-holder align-items-center py-7 bg-gray-100 vh-100">
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-lg-6 px-lg-4" >
+                  <div class="card">
+                    <div class="card-body p-lg-5">
+                      <form id="loginForm" action="index.html"[formGroup] = "formdata" >
+                        
+                        <br>
+                        <div class="form-floating mb-3">
+                          <input class="form-control" formControlName = "vlanName" id="floatingPassword" type="text" placeholder=" " required>
+                          <label for="floatingPassword">vlanName</label>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="form-floating mb-3">
+                          <input class="form-control" formControlName = "vlanId" id="floatingPassword" type="text" placeholder=" " required>
+                          <label for="floatingPassword">vlanId</label>
+                        </div>
+                        <br>
+                        <br>
+                        <button class="btn btn-primary" type="button"(click)="onSaveAddVlan(formdata.value)" >Save</button>
+                      </form>
+                    </div>
+                    <br>
+                
+                    
+                  </div>
+                </div>		</div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div>
+      <button class="btn btn-outline-success" type="button" (click)="onPopDelVlan()">Delete Vlan </button>
+      <div class="overlay" *ngIf="popupdelvlan">
+        <div class="popup" style="width: 1230px">
+            <a class="close" (click)="popupdelvlan = false">&times;</a>
+            <div class="content">
+          <div class="page-holder align-items-center py-7 bg-gray-100 vh-100">
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-lg-6 px-lg-4" >
+                  <div class="card">
+                    <div class="card-body p-lg-5">
+                      <form id="loginForm" action="index.html"[formGroup] = "formdata" >
+                     
+                        <div class="form-floating mb-3">
+                          <input class="form-control" formControlName = "vlanName" id="floatingPassword" type="text" placeholder=" " required>
+                          <label for="floatingPassword">vlanName</label>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="form-floating mb-3">
+                          <input class="form-control" formControlName = "vlanId" id="floatingPassword" type="text" placeholder=" " required>
+                          <label for="floatingPassword">vlanId</label>
+                        </div>
+                        <br>
+                        <br>
+                        <button class="btn btn-primary" type="button"(click)="onSaveDelVlan(formdata.value)" >Save</button>
+                      </form>
+                    </div>
+                    <br>
+                
+                    
+                  </div>
+                </div>		</div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    
+    <button class="btn btn-outline-success" type="button" (click)="onPopAssignIntToVlan()">assign Int To Vlan </button>
+    <div class="overlay" *ngIf="popupassigninttovlan">
+      <div class="popup" style="width: 1230px">
+          <a class="close" (click)="popupassigninttovlan = false">&times;</a>
+          <div class="content">
+        <div class="page-holder align-items-center py-7 bg-gray-100 vh-100">
+          <div class="container">
+            <div class="row align-items-center">
+              <div class="col-lg-6 px-lg-4" >
+                <div class="card">
+                  <div class="card-body p-lg-5">
+                    <form id="loginForm" action="index.html"[formGroup] = "formdata" >
+                   
+                      <div class="form-floating mb-3">
+                        <input class="form-control" formControlName = "intType" id="floatingPassword" type="text" placeholder=" " required>
+                        <label for="floatingPassword">intType</label>
+                      </div>
+                      <br>
+                      <br>
+                      <div class="form-floating mb-3">
+                        <input class="form-control" formControlName = "intId" id="floatingPassword" type="text" placeholder=" " required>
+                        <label for="floatingPassword">intId</label>
+                      </div>
+                      <br>
+                      <br>
+                      <div class="form-floating mb-3">
+                        <input class="form-control" formControlName = "vlanId" id="floatingPassword" type="text" placeholder=" " required>
+                        <label for="floatingPassword">vlanId</label>
+                      </div>
+                      <br>
+                      <br>
+                      <button class="btn btn-primary" type="button"(click)="onSaveAssignIntToVlan(formdata.value)" >Save</button>
+                    </form>
+                  </div>
+                  <br>
+              
+                  
+                </div>
+              </div>		</div>
+      </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div>
+    <button class="btn btn-outline-success" type="button" (click)="onPopConfigTrunk()">Configure Trunk </button>
+    <div class="overlay" *ngIf="popupconfigtrunk">
+      <div class="popup" style="width: 1230px">
+          <a class="close" (click)="popupconfigtrunk = false">&times;</a>
+          <div class="content">
+        <div class="page-holder align-items-center py-7 bg-gray-100 vh-100">
+          <div class="container">
+            <div class="row align-items-center">
+              <div class="col-lg-6 px-lg-4" >
+                <div class="card">
+                  <div class="card-body p-lg-5">
+                    <form id="loginForm" action="index.html"[formGroup] = "formdata" >
+                   
+                      <div class="form-floating mb-3">
+                        <input class="form-control" formControlName = "intType" id="floatingPassword" type="text" placeholder=" " required>
+                        <label for="floatingPassword">intType</label>
+                      </div>
+                      <br>
+                      <br>
+                      <div class="form-floating mb-3">
+                        <input class="form-control" formControlName = "intId" id="floatingPassword" type="text" placeholder=" " required>
+                        <label for="floatingPassword">intId</label>
+                      </div>
+                      <br>
+                      <br>
+                      <div class="form-floating mb-3">
+                        <input class="form-control" formControlName = "allowedVlans" id="floatingPassword" type="text" placeholder=" " required>
+                        <label for="floatingPassword">allowedVlans</label>
+                      </div>
+                      <br>
+                      <br>
+                      <button class="btn btn-primary" type="button"(click)="onSaveConfigTrunk(formdata.value)" >Save</button>
+                    </form>
+                  </div>
+                  <br>
+              
+                  
+                </div>
+              </div>		</div>
+      </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    
+    <div>
+    <button class="btn btn-outline-success" type="button" (click)="onPopAddVlansToTrunk()">Add vlans to Trunk </button>
+    <div class="overlay" *ngIf="popupaddvlanstotrunk">
+      <div class="popup" style="width: 1230px">
+          <a class="close" (click)="popupaddvlanstotrunk = false">&times;</a>
+          <div class="content">
+        <div class="page-holder align-items-center py-7 bg-gray-100 vh-100">
+          <div class="container">
+            <div class="row align-items-center">
+              <div class="col-lg-6 px-lg-4" >
+                <div class="card">
+                  <div class="card-body p-lg-5">
+                    <form id="loginForm" action="index.html"[formGroup] = "formdata" >
+                   
+                      <div class="form-floating mb-3">
+                        <input class="form-control" formControlName = "intType" id="floatingPassword" type="text" placeholder=" " required>
+                        <label for="floatingPassword">intType</label>
+                      </div>
+                      <br>
+                      <br>
+                      <div class="form-floating mb-3">
+                        <input class="form-control" formControlName = "intId" id="floatingPassword" type="text" placeholder=" " required>
+                        <label for="floatingPassword">intId</label>
+                      </div>
+                      <br>
+                      <br>
+                      <div class="form-floating mb-3">
+                        <input class="form-control" formControlName = "allowedVlans" id="floatingPassword" type="text" placeholder=" " required>
+                        <label for="floatingPassword">allowedVlans</label>
+                      </div>
+                      <br>
+                      <br>
+                      <button class="btn btn-primary" type="button"(click)="onSaveAddVlansToTrunk(formdata.value)" >Save</button>
+                    </form>
+                  </div>
+                  <br>
+              
+                  
+                </div>
+              </div>		</div>
+      </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    
+    <div>
+    <button class="btn btn-outline-success" type="button" (click)="onPopSetBridgePriority()">Set bridge priority</button>
+    <div class="overlay" *ngIf="popupsetbridgepriority">
+      <div class="popup" style="width: 1230px">
+          <a class="close" (click)="popupsetbridgepriority = false">&times;</a>
+          <div class="content">
+        <div class="page-holder align-items-center py-7 bg-gray-100 vh-100">
+          <div class="container">
+            <div class="row align-items-center">
+              <div class="col-lg-6 px-lg-4" >
+                <div class="card">
+                  <div class="card-body p-lg-5">
+                    <form id="loginForm" action="index.html"[formGroup] = "formdata" >
+                   
+                      <div class="form-floating mb-3">
+                        <input class="form-control" formControlName = "vlanId" id="floatingPassword" type="text" placeholder=" " required>
+                        <label for="floatingPassword">vlanId</label>
+                      </div>
+                      <br>
+                      <br>
+                      <div class="form-floating mb-3">
+                        <input class="form-control" formControlName = "priority" id="floatingPassword" type="text" placeholder=" " required>
+                        <label for="floatingPassword">priority</label>
+                      </div>
+                      <br>
+                      <br>
+                      <button class="btn btn-primary" type="button"(click)="onSaveSetBridgePriority(formdata.value)" >Save</button>
+                    </form>
+                  </div>
+                  <br>
+              
+                  
+                </div>
+              </div>		</div>
+      </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    
+    <div>
+      <button  class="btn btn-outline-success" type="button" (click)="onPopShutDownInt()">Shutdown Interface </button>
+      <div class="overlay" *ngIf="popupshutdownint">
+        <div class="popup" style="width: 1230px">
+            <a class="close" (click)="popupshutdownint = false">&times;</a>
+            <div class="content">
+          <div class="page-holder align-items-center py-7 bg-gray-100 vh-100">
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-lg-6 px-lg-4" >
+                  <div class="card">
+                    <div class="card-body p-lg-5">
+                      <form id="loginForm" action="index.html"[formGroup] = "formdata" >
+                     
+                        <div class="form-floating mb-3">
+                          <input class="form-control" formControlName = "vlanId" id="floatingPassword" type="text" placeholder=" " required>
+                          <label for="floatingPassword">vlanId</label>
+                        </div>
+                        <br>
+                        <br>
+                        <button class="btn btn-primary" type="button"(click)="onSaveShutDownInt(formdata.value)" >Save</button>
+                      </form>
+                    </div>
+                    <br>
+                
+                    
+                  </div>
+                </div>		</div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    
+    <div>
+      <button class="btn btn-outline-success" type="button" (click)="onPopNoShutDownInt()">No Shutdown Interface </button>
+      <div class="overlay" *ngIf="popupnoshutdownint">
+        <div class="popup" style="width: 1230px">
+            <a class="close" (click)="popupnoshutdownint = false">&times;</a>
+            <div class="content">
+          <div class="page-holder align-items-center py-7 bg-gray-100 vh-100">
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-lg-6 px-lg-4" >
+                  <div class="card">
+                    <div class="card-body p-lg-5">
+                      <form id="loginForm" action="index.html"[formGroup] = "formdata" >
+                     
+                        <div class="form-floating mb-3">
+                          <input class="form-control" formControlName = "vlanId" id="floatingPassword" type="text" placeholder=" " required>
+                          <label for="floatingPassword">vlanId</label>
+                        </div>
+                        <br>
+                        <br>
+                        <button class="btn btn-primary" type="button"(click)="onSaveNoShutDownInt(formdata.value)" >Save</button>
+                      </form>
+                    </div>
+                    <br>
+                
+                    
+                  </div>
+                </div>		</div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    
+    <div>
+        <button class="btn btn-outline-success" type="button" (click)="getBackUp(hosts)">GET {{country}} BACKUP FILE</button>
+    </div>
+    <div>
+      <button class="btn btn-outline-success" type="button" (click)="saveToStartUpConfig()">Save To Start Up Config</button>
+    </div>
+    <div>
+      <button class="btn btn-outline-success" type="button" (click)="GetLineCompliance(hosts)">Get SSH compliance</button>
+    </div>
+    <div>
+      <button class="btn btn-outline-success" type="button" (click)="GetPortCompliance(hosts)">Get PortSpanguard Compliance</button>
+    </div>
+    </div>
+    
+    <div *ngIf="arch" id="network" style="background-color: black; max-height: 660px; width: 99%;" > </div>
+</div>
+
+
+<div class="loading-wrapper" *ngIf="myLoading" >
+  <div *ngIf="myLoading" class="loading">
+    <mat-progress-spinner class="spinner-animation" color="primary" mode="indeterminate"></mat-progress-spinner>
+  </div>
+</div>
+<div id="xterm"></div>
+
+
+
+
+
