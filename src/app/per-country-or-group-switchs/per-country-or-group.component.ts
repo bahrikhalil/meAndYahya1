@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { BackendService } from '../services/backend.service';
 import { SwitchsComponent } from '../switchs/switchs.component';
 import { AnyForUntypedForms, FormControl,FormGroup } from '@angular/forms';
 import { vlan,vlanInt,trunk, VlanInfo, IntInfo } from '../shared/switchs-models';
@@ -13,6 +12,8 @@ import { HttpHeaders } from '@angular/common/http';
 import { Route, Router } from '@angular/router';
 import { TerminalService } from '../services/terminal.service';
 import { NetworkTopologyService } from '../services/network-topology.service';
+import { SwitchesGetService } from '../services/switches-get.service';
+import { SwitchesPostService } from '../services/switches-post.service';
 
 interface Neighbors {
   [key: string]: string[];
@@ -56,7 +57,9 @@ export class PerCountryOrGroupComponent implements OnInit {
   arch=true;
 
   
-  constructor(private topologyService:NetworkTopologyService, private service:BackendService, private route:Router) {
+  constructor(private topologyService:NetworkTopologyService,
+     private switchesGetService:SwitchesGetService
+    , private switchesPostService:SwitchesPostService) {
     this.hosts = JSON.parse(localStorage.getItem('hosts')!);
     this.country=this.hosts[0];
     this.shownHosts=this.hosts.slice(1,this.hosts.length);
@@ -74,7 +77,7 @@ export class PerCountryOrGroupComponent implements OnInit {
     }); 
     
       this.myLoading=true;
-      this.service.getNeighbors(localStorage.getItem("lastSite")!,this.headers,()=>{}).subscribe((data)=>{
+      this.switchesGetService.getNeighbors(localStorage.getItem("lastSite")!,this.headers,()=>{}).subscribe((data)=>{
       this.myLoading=false;
       this.neigh=data;
       this.topologyService.buildTopology(this.neigh);
@@ -98,24 +101,7 @@ export class PerCountryOrGroupComponent implements OnInit {
       
   }
 
- 
-  
-GetLineCompliance(data:any){
-  this.myLoading=true;
-  this.service.triggerLineCompliance(data,this.headers).subscribe(()=> this.myLoading=false);
-}
-GetPortCompliance(data:any){
-  this.myLoading=true;
-  this.service.triggerPortCompliance(data,this.headers).subscribe((output)=> {
-    this.myLoading=false;
 
-  },(error)=>{
-    this.myLoading=false;
-    alert("there has been an error please try again")
-  }
-  )
-    
-  }
 
 
 onSaveAddVlanInt(data:any){
@@ -125,7 +111,7 @@ onSaveAddVlanInt(data:any){
     this.vlanInt.ipAddress=data.ipAddress;
     this.vlanInt.hosts = JSON.parse(localStorage.getItem('hosts')!);
     this.myLoading=true;
-    this.service.addVlanInt(this.vlanInt,()=> this.myLoading=false,this.headers);
+    this.switchesPostService.addVlanInt(this.vlanInt,()=> this.myLoading=false,this.headers);
     
     
      }
@@ -136,7 +122,7 @@ onSaveDelVlanInt(data:any){
       this.vlanInt.ipAddress=data.ipAddress;
       this.vlanInt.hosts = JSON.parse(localStorage.getItem('hosts')!);
       this.myLoading=true;
-      this.service.delVlanInt(this.vlanInt,()=> this.myLoading=false,this.headers);
+      this.switchesPostService.delVlanInt(this.vlanInt,()=> this.myLoading=false,this.headers);
       
        }
 onSaveAddVlan(data:any){
@@ -145,7 +131,7 @@ onSaveAddVlan(data:any){
         this.vlan.vlanName=data.vlanName;
         this.vlan.hosts= JSON.parse(localStorage.getItem('hosts')!);
         this.myLoading=true;
-        this.service.addVlan(this.vlan,()=> this.myLoading=false,this.headers);
+        this.switchesPostService.addVlan(this.vlan,()=> this.myLoading=false,this.headers);
         
          }
 
@@ -155,7 +141,7 @@ onSaveDelVlan(data:any){
        this.vlan.vlanName=data.vlanName;
        this.vlan.hosts = JSON.parse(localStorage.getItem('hosts')!);
        this.myLoading=true;
-       this.service.delVlan(this.vlan,()=> this.myLoading=false,this.headers);
+       this.switchesPostService.delVlan(this.vlan,()=> this.myLoading=false,this.headers);
           
  }
  onSaveAssignIntToVlan(data:any){
@@ -164,7 +150,7 @@ onSaveDelVlan(data:any){
        this.vlan.intType=data.intType;
        this.vlan.hosts = JSON.parse(localStorage.getItem('hosts')!);
        this.myLoading=true;
-       this.service.assignIntToVlan(this.vlan,()=> this.myLoading=false,this.headers);
+       this.switchesPostService.assignIntToVlan(this.vlan,()=> this.myLoading=false,this.headers);
 }
 
 
@@ -175,7 +161,7 @@ onSaveConfigTrunk(data:any){
   this.trunk.allowedVlans=data.allowedVlans;
   this.trunk.hosts= JSON.parse(localStorage.getItem('hosts')!);
   this.myLoading=true;
-  this.service.configTrunk(this.trunk,()=> this.myLoading=false,this.headers);
+  this.switchesPostService.configTrunk(this.trunk,()=> this.myLoading=false,this.headers);
 }
 onSaveAddVlansToTrunk(data:any){
 
@@ -184,8 +170,7 @@ onSaveAddVlansToTrunk(data:any){
   this.trunk.allowedVlans=data.allowedVlans;
   this.trunk.hosts = JSON.parse(localStorage.getItem('hosts')!);
   this.myLoading=true;
-  this.service.addVlansToTrunk(this.trunk,()=> this.myLoading=false,this.headers);
- // this.myLoading=false;
+  this.switchesPostService.addVlansToTrunk(this.trunk,()=> this.myLoading=false,this.headers);
 }
 onSaveSetBridgePriority(data:any){
 
@@ -193,7 +178,7 @@ onSaveSetBridgePriority(data:any){
   this.trunk.priority=data.priority;
   this.trunk.hosts = JSON.parse(localStorage.getItem('hosts')!);
   this.myLoading=true;
-  this.service.setBridgePriority(this.trunk,()=> this.myLoading=false,this.headers);
+  this.switchesPostService.setBridgePriority(this.trunk,()=> this.myLoading=false,this.headers);
 }
 
 
@@ -202,14 +187,14 @@ onSaveNoShutDownInt(data:any){
   this.vlanInt.vlanId=data.vlanId;
   this.vlanInt.hosts= JSON.parse(localStorage.getItem('hosts')!);
   this.myLoading=true;
-  this.service.NoShutDownInt(this.vlanInt,()=> this.myLoading=false,this.headers);
+  this.switchesPostService.NoShutDownInt(this.vlanInt,()=> this.myLoading=false,this.headers);
 }
 onSaveShutDownInt(data:any){
 
   this.vlanInt.vlanId=data.vlanId;
   this.vlanInt.hosts = JSON.parse(localStorage.getItem('hosts')!);
   this.myLoading=true;
-  this.service.ShutDownInt(this.vlanInt,()=> this.myLoading=false,this.headers);
+  this.switchesPostService.ShutDownInt(this.vlanInt,()=> this.myLoading=false,this.headers);
   
 
 }
@@ -218,7 +203,7 @@ onHostClickShowVlans(data:any){
  if(this.panelOpen==false){
   if(localStorage.getItem(data+" vlanInfo")==null)  {
  this.myLoading=true;
-  this.service.triggerGetVlans(data,this.headers).subscribe(output =>{
+  this.switchesGetService.triggerGetVlans(data,this.headers).subscribe(output =>{
     localStorage.setItem(data+" vlanInfo",JSON.stringify(output));
     this.currVlanInfo=output;
     this.myLoading=false;
@@ -240,7 +225,7 @@ onHostClickShowInt(data:any){
   if(this.panelOpen==false){
   if (localStorage.getItem(data+" IntInfo")==null){
     this.myLoading=true;
-  this.service.triggerGetIntInfo(data,this.headers).subscribe(output =>{
+  this.switchesGetService.triggerGetIntInfo(data,this.headers).subscribe(output =>{
     localStorage.setItem(data+" IntInfo",JSON.stringify(output));
     this.currIntInfo=output;
       this.myLoading=false; 
@@ -263,13 +248,13 @@ console.log(this.currIntInfo);
   }
   getBackUp(data:any){
     this.myLoading=true;
-    this.service.getBackup(data,()=> this.myLoading=false,this.headers);
+    this.switchesGetService.getBackup(data,()=> this.myLoading=false,this.headers);
   }
 
 
 saveToStartUpConfig(){
   this.myLoading=true;
-  this.service.saveToStartUpConfig(()=> this.myLoading=false,this.headers);
+  this.switchesPostService.saveToStartUpConfig(()=> this.myLoading=false,this.headers);
 }
 
 onPopAddVlanInt(){

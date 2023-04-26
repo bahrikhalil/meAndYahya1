@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { BackendService } from './backend.service';
+import { SwitchesPostService } from './switches-post.service';
 
-describe('BackendService', () => {
-  let service: BackendService;
+describe('SwitchesPostService', () => {
+  let service: SwitchesPostService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(BackendService);
+    service = TestBed.inject(SwitchesPostService);
   });
 
   it('should be created', () => {

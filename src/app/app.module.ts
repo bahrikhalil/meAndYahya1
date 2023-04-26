@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoginComponent } from './login/login.component';
 import { HttpClientModule } from '@angular/common/http';
-import { MapserviceService } from './services/mapservice.service';
+
 import { AboutComponent } from './about/about.component';
 
 import{MatIconModule} from '@angular/material/icon';
@@ -20,10 +20,9 @@ import { MatListModule } from '@angular/material/list';
 import { PerCountryOrGroupComponent } from './per-country-or-group-switchs/per-country-or-group.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatMenuModule } from '@angular/material/menu';
+
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule, Routes }   from '@angular/router';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 
@@ -59,7 +58,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   ],
   exports: [MatExpansionModule],
   providers: [
-    MapserviceService
+   
   
   
   ],

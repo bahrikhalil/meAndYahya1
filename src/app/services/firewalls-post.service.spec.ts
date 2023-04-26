@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FirewallsService } from './firewalls.service';
+import { FirewallsPostService } from './firewalls-post.service';
 
-describe('FirewallsService', () => {
-  let service: FirewallsService;
+describe('FirewallsPostService', () => {
+  let service: FirewallsPostService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(FirewallsService);
+    service = TestBed.inject(FirewallsPostService);
   });
 
   it('should be created', () => {

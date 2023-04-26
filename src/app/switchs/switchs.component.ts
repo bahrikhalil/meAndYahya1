@@ -1,22 +1,18 @@
 
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Route, Router, Routes } from '@angular/router';
+import {Router} from '@angular/router';
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { BackendService } from '../services/backend.service';
-import { baseUrl } from '../shared/baseUrl';
-import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { Observable } from 'rxjs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { MatButtonModule} from '@angular/material/button'
-import { FirewallsComponent } from '../firewalls/firewalls.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ifError } from 'assert';
 import { alertObj, issueObj } from '../shared/switchs-models';
 import { NetworkTopologyService } from '../services/network-topology.service';
-import { option } from 'vis-util';
+import { SwitchesGetService } from '../services/switches-get.service';
+import { SwitchesPostService } from '../services/switches-post.service';
+import { CreateReportSwitchesService } from '../services/create-report-switches.service';
+
 
 interface Neighbors {
   [key: string]: string[];
@@ -62,7 +58,12 @@ export class SwitchsComponent implements OnInit {
   issuemap:IssueMap= {};
   neigh:Neighbors = {};
 
-  constructor(private topologyService:NetworkTopologyService, private route:Router, private service:BackendService ) { 
+  constructor(private topologyService:NetworkTopologyService,
+    private route:Router,
+    private switchesGetService:SwitchesGetService,
+    private switchesPostService:SwitchesPostService,
+    private reportService:CreateReportSwitchesService
+     ) { 
     this.hosts = JSON.parse(localStorage.getItem('hosts')!);
   }
 
@@ -77,7 +78,7 @@ export class SwitchsComponent implements OnInit {
    
     Object.entries(this.siteHosts).forEach(([key,value])=>{     
       if(JSON.parse(localStorage.getItem(key)!)==null){   
-        this.service.getHosts(key.split("_")[0],this.headers,"/api/switchs/post/triggerGetSwitchs/").subscribe(
+        this.switchesGetService.getHosts(key.split("_")[0],this.headers,"/api/switchs/post/triggerGetSwitchs/").subscribe(
           (data:String[])=>{
             this.siteHosts[key]=data;
             this.siteHosts[key]= this.siteHosts[key].map(item => item.replace(/"/g, ''));
@@ -89,15 +90,11 @@ export class SwitchsComponent implements OnInit {
         } 
         else this.siteHosts[key]=JSON.parse(localStorage.getItem(key)!);
       });    
-      
-  
-   
-  
- //this.sites[this.sites.indexOf('Morocco_switchs')]
+
   }
 addDevice(data:any){
     this.myLoading=true;
-    this.service.addDevice(data,this.headers).subscribe((data)=>{
+    this.switchesPostService.addDevice(data,this.headers).subscribe((data)=>{
       console.log(data);
       this.myLoading=false;  
     },(error)=>{alert("there has been an error please try again")}
@@ -107,7 +104,7 @@ addDevice(data:any){
 networkTopology(){
   this.myLoading=true;
   this.changeContent(1);
-  this.service.getNeighbors(localStorage.getItem("lastSite")!,this.headers,()=>{}).subscribe((data)=>{
+  this.switchesGetService.getNeighbors(localStorage.getItem("lastSite")!,this.headers,()=>{}).subscribe((data)=>{
   this.myLoading=false;
   this.neigh=data;
   this.topologyService.buildTopology(this.neigh); 
@@ -159,7 +156,7 @@ networkTopology(){
   this.hosts=[site];
   localStorage.setItem('hosts', JSON.stringify(this.hosts));
   console.log(this.hosts);
-  this.service.getNeighbors(site,this.headers,()=>{}).subscribe((data)=>{
+  this.switchesGetService.getNeighbors(site,this.headers,()=>{}).subscribe((data)=>{
     this.myLoading=false;
     localStorage.setItem('lastSite',site)
     this.route.navigate(["/per-country-or-group"]);
@@ -189,7 +186,7 @@ networkTopology(){
 }
 setGlobalConfig(data:string,hosts:any){
   this.myLoading=true;
-  this.service.setGlobalConfig(data,hosts,this.headers).subscribe(()=>{
+  this.switchesPostService.setGlobalConfig(data,hosts,this.headers).subscribe(()=>{
      this.myLoading=false;
 
   },(error)=>{
@@ -202,7 +199,7 @@ setGlobalConfig(data:string,hosts:any){
  createReport(data:any){
   
   this.myLoading=true;
-  this.service.createReport(data,this.headers).then((alertObjects)=>{
+  this.reportService.createReport(data,this.headers).then((alertObjects)=>{
       console.log(alertObjects);
       this.myLoading=false;     
       

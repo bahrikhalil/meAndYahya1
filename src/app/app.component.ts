@@ -1,9 +1,6 @@
 import { } from '@angular/compiler';
 import { Component ,OnInit, ViewChild} from '@angular/core';
-import { FormControl,FormGroup } from '@angular/forms';
-import { BackendService } from './services/backend.service';
-import { FirewallsComponent } from './firewalls/firewalls.component';
-import { Routes,RouterModule } from '@angular/router';
+
 
 //import { event } from './shared/models';
 
@@ -21,7 +18,7 @@ export class AppComponent {
   login:boolean=false;
   src :String="../assets/img/test.png" 
   
-constructor(private service:BackendService){
+constructor(){
 
 }
   

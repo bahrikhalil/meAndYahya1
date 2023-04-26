@@ -2,14 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { BackendService } from '../services/backend.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-//import { UserServiceService } from '../servcies/user-service.service';
 import { register_user } from '../shared/switchs-models';
 import { log_user } from '../shared/switchs-models';
-import { baseUrl } from '../shared/baseUrl';
+import { SwitchesGetService } from '../services/switches-get.service';
+import { LoginService } from '../services/login.service';
+
 
 
 
@@ -33,7 +31,7 @@ export class LoginComponent implements OnInit {
   token:any;
 
 
-  constructor(private service:BackendService, private route:Router, private http:HttpClient) { }
+  constructor(private service:LoginService, private route:Router, private http:HttpClient) { }
 
   ngOnInit(): void {
   

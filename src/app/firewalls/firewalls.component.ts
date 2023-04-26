@@ -2,15 +2,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router, Routes } from '@angular/router';
-import { rejects } from 'assert';
-import { resolve } from 'dns';
-import { Callback } from 'ssh2';
-import { FirewallsService } from '../services/firewalls.service';
+
 import { policy, alertObj, timeoutObj } from '../shared/firewalls-models';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { MatButtonModule} from '@angular/material/button'
-import { SwitchsComponent } from '../switchs/switchs.component';
 import { Observable } from 'rxjs';
+import { FirewallsGetService } from '../services/firewalls-get.service';
+import { FirewallsPostService } from '../services/firewalls-post.service';
+import { CreateReportFirewallsService } from '../services/create-report-firewalls.service';
 
 
 
@@ -57,7 +56,10 @@ export class FirewallsComponent implements OnInit {
   timeout:timeoutObj=new timeoutObj();
   hosts1:string[]=[];
 
-  constructor(private http:HttpClient, private route:Router, private service:FirewallsService ) { 
+  constructor(private route:Router,
+     private firewallsGetService:FirewallsGetService,
+     private firewallsPostService:FirewallsPostService,
+     private reportService:CreateReportFirewallsService ) { 
   
   }
 
@@ -94,7 +96,7 @@ export class FirewallsComponent implements OnInit {
       if(JSON.parse(localStorage.getItem(key)!)==null) {
         console.log("nulllllllllllll");
         
-        this.service.getHosts(key.split("_")[0],this.headers,"/api/firewalls/post/triggerGetFirewalls/").subscribe(
+        this.firewallsGetService.getHosts(key.split("_")[0],this.headers,"/api/firewalls/post/triggerGetFirewalls/").subscribe(
           (data:string[])=>{
             this.siteHosts[key]=data;
             this.siteHosts[key]= this.siteHosts[key].map(item => item.replace(/"/g, ''));
@@ -131,7 +133,7 @@ export class FirewallsComponent implements OnInit {
     
     let data1 = ["Morocco_firewalls","192.168.254.10"]
     this.myLoading=true;
-    this.service.addDevice(data1,this.headers).subscribe((data)=>{
+    this.firewallsPostService.addDevice(data1,this.headers).subscribe((data)=>{
       console.log(data);
       this.myLoading=false;  
     })
@@ -150,7 +152,7 @@ export class FirewallsComponent implements OnInit {
     this.policy.schedule=data.schedule;
     this.policy.status=data.status;   
     this.policy.hosts = JSON.parse(localStorage.getItem('firewalls') || 'default value');
-    this.service.addPolicy(this.policy,this.headers).subscribe((data)=>{
+    this.firewallsPostService.addPolicy(this.policy,this.headers).subscribe((data)=>{
       console.log("done");
       
     },(error)=>{
@@ -161,7 +163,7 @@ export class FirewallsComponent implements OnInit {
 
   delPolicy(data:any){
     this.myLoading=true;
-    this.service.delPolicy(data,this.headers).subscribe((data)=>{
+    this.firewallsPostService.delPolicy(data,this.headers).subscribe((data)=>{
       console.log(data);
       this.myLoading=false;  
     },(error)=>{
@@ -171,7 +173,7 @@ export class FirewallsComponent implements OnInit {
   }
   addServiceObject(data:any){
     this.myLoading=true;
-    this.service.addServiceObject(data,this.headers).subscribe((data)=>{
+    this.firewallsPostService.addServiceObject(data,this.headers).subscribe((data)=>{
       console.log(data);
       this.myLoading=false;  
     },(error)=>{
@@ -181,7 +183,7 @@ export class FirewallsComponent implements OnInit {
   }
   delServiceObject(data:any){
     this.myLoading=true;
-    this.service.delServiceObject(data,this.headers).subscribe((data)=>{
+    this.firewallsPostService.delServiceObject(data,this.headers).subscribe((data)=>{
       console.log(data);
       this.myLoading=false;  
     },(error)=>{
@@ -191,7 +193,7 @@ export class FirewallsComponent implements OnInit {
   }
   addAddressGrpObject(data:any){
     this.myLoading=true;
-    this.service.addAddressGrpObject(data,this.headers).subscribe((data)=>{
+    this.firewallsPostService.addAddressGrpObject(data,this.headers).subscribe((data)=>{
       console.log(data);
       this.myLoading=false;  
     },(error)=>{
@@ -201,7 +203,7 @@ export class FirewallsComponent implements OnInit {
   }
   delAddressGrpObject(data:any){
     this.myLoading=true;
-    this.service.delAddressGrpObject(data,this.headers).subscribe((data)=>{
+    this.firewallsPostService.delAddressGrpObject(data,this.headers).subscribe((data)=>{
       console.log(data);
       this.myLoading=false;  
     },(error)=>{
@@ -211,7 +213,7 @@ export class FirewallsComponent implements OnInit {
   }
   addServiceGrpObject(data:any){
     this.myLoading=true;
-    this.service.addServiceGrpObject(data,this.headers).subscribe((data)=>{
+    this.firewallsPostService.addServiceGrpObject(data,this.headers).subscribe((data)=>{
       console.log(data);
       this.myLoading=false;  
     },(error)=>{
@@ -221,7 +223,7 @@ export class FirewallsComponent implements OnInit {
   }
   delServiceGrpObject(data:any){
     this.myLoading=true;
-    this.service.delServiceGrpObject(data,this.headers).subscribe((data)=>{
+    this.firewallsPostService.delServiceGrpObject(data,this.headers).subscribe((data)=>{
       console.log(data);
       this.myLoading=false;  
     },(error)=>{
@@ -234,7 +236,7 @@ export class FirewallsComponent implements OnInit {
     if(hosts.length==0)
     policy.hosts = JSON.parse(localStorage.getItem('firewalls') || 'default value');
     else this.timeout.hosts=hosts;
-    return this.service.addPolicy(policy,this.headers)
+    return this.firewallsPostService.addPolicy(policy,this.headers)
   }
 
   setTimeout(data:any, hosts:string[]):Observable<any>{
@@ -243,7 +245,7 @@ export class FirewallsComponent implements OnInit {
     if(hosts.length==0)
     this.timeout.hosts = JSON.parse(localStorage.getItem('firewalls') || 'default value');
     else this.timeout.hosts=hosts;
-   return this.service.setTimeout(this.timeout,this.headers)
+   return this.firewallsPostService.setTimeout(this.timeout,this.headers)
   }
 
 
@@ -252,7 +254,7 @@ export class FirewallsComponent implements OnInit {
       data=JSON.parse(localStorage.getItem(data[0])!);
     }
     this.myLoading=true;
-    this.service.getPolicys(data,this.headers).subscribe((data)=>{
+    this.firewallsGetService.getPolicys(data,this.headers).subscribe((data)=>{
       console.log(data);
       this.myLoading=false;  
     },(error)=>{
@@ -266,7 +268,7 @@ export class FirewallsComponent implements OnInit {
       data=JSON.parse(localStorage.getItem(data[0])!);
     }
     this.myLoading=true;
-    this.service.getServiceObject(data,this.headers).subscribe((data)=>{
+    this.firewallsGetService.getServiceObject(data,this.headers).subscribe((data)=>{
       console.log(data);
       this.myLoading=false;
       
@@ -281,7 +283,7 @@ export class FirewallsComponent implements OnInit {
       data=JSON.parse(localStorage.getItem(data[0])!);
     }
     this.myLoading=true;
-    this.service.getServiceGrpObject(data,this.headers).subscribe((data)=>{
+    this.firewallsGetService.getServiceGrpObject(data,this.headers).subscribe((data)=>{
       console.log(data);
       this.myLoading=false;
       
@@ -296,7 +298,7 @@ export class FirewallsComponent implements OnInit {
       data=JSON.parse(localStorage.getItem(data[0])!);
     }
     this.myLoading=true;
-    this.service.getAddressObject(data,this.headers).subscribe((data)=>{
+    this.firewallsGetService.getAddressObject(data,this.headers).subscribe((data)=>{
       console.log(data);
       this.myLoading=false;
       
@@ -311,7 +313,7 @@ export class FirewallsComponent implements OnInit {
       data=JSON.parse(localStorage.getItem(data[0])!);
     }
     this.myLoading=true;
-    this.service.getAddressGrpObject(data,this.headers).subscribe((data)=>{
+    this.firewallsGetService.getAddressGrpObject(data,this.headers).subscribe((data)=>{
       console.log(data);
       this.myLoading=false;      
     },(error)=>{
@@ -322,135 +324,13 @@ export class FirewallsComponent implements OnInit {
 
   getBackup(data:any){
     this.myLoading=true;
-    this.service.getBackup(data,()=> this.myLoading=false,this.headers);
+    this.firewallsGetService.getBackup(data,()=> this.myLoading=false,this.headers);
   }
 
-  
-
-createReport(data:string[]){
-
-   // set the list of hosts to be sent , remove the first item for the backend functions that will not use
-   // ansible playbook (no need for the first element that contains the group name, only hosts needed)
-    if(data[0]!="Individuals"){
-      data=JSON.parse(localStorage.getItem(data[0])!);
-    }
-    else{
-      data.shift();
-    }
-   
-  this.myLoading=true;
-  let promisesList1:any=[];
-  let promisesList2:any=[];
-  // start the first compliance check (policys)
-  const promise1 = new Promise((resolve1,reject1) => {
-  this.service.getPolicys(data,this.headers).subscribe((output)=>{
-    this.policys=output;
-    Object.entries(this.policys).forEach(([key,value])=>{
-      value.forEach((element)=>{
-      if((element.dstaddr=="all") || (element.srcaddr=="all") || (element.srcintf=="all") || (element.dstintf=="all")) {
-          if(element.status=="enable"){
-            element.status="disable";              
-            const promise = new Promise((resolve,reject) => {
-            this.editPolicy(element,["Individuals",key]).subscribe((response)=>{
-              let alertObj1:alertObj = this.service.createAlertObj("policy",element.name,"source and destination addresses and ports should be specified","TO BE FIXED MANNUALLY: all policys have been disabled, please specify the addresses/ports",key)
-              this.alertObjList.push(alertObj1);
-              resolve(response);
-            },
-            (error)=>reject(error)
-            ); 
-           });
-            promisesList2.push(promise);
-          }         
-        }
-      })
-    });
-    resolve1(output);
-  },
-  (error)=>reject1(error)
-  )
-});
-
-    // second compliance check (adminetimeout)
-    const promise2 = new Promise((resolve1,reject1) => {
-    this.service.getTimeout(data,this.headers).subscribe((output1)=>{
-        console.log(output1);      
-        Object.entries(output1).forEach(([key,value])=>{
-        if(parseInt(value)==10){
-          const promise = new Promise((resolve,rejects) => {
-            this.setTimeout("10",["Individuals",key]).subscribe((response)=>{
-              let alertObj1:alertObj = this.service.createAlertObj("system config","admin timeout","admin timeout : ("+value+") should be less than 10mn","FIXED : admin timeout set to 10mn, please chose your custom value",key);       
-              this.alertObjList.push(alertObj1);
-              resolve(response);
-            },
-            (error)=>rejects(error)
-            );     
-           });
-          promisesList2.push(promise);
-        }
-      });
-      resolve1(output1);
-    },
-    (error)=>reject1(error)
-    ) 
-  });
-      // third compliance check (ports)
-      const promise3 = new Promise((resolve,reject) => {
-        this.service.getPortsCompliance(data,this.headers).subscribe((output2)=>{
-          
-          Object.entries(output2).forEach(([key,value])=>{
-            if(value.length>0){
-              let alertObj1:alertObj = this.service.createAlertObj("ports config","allowaccess list","","",key);
-              if((value.indexOf("port1")!=-1) && (value.length>1)){
-                  alertObj1.status="FIXED: disabled http and/or telnet on port1 and disabled all services on all the other ports";
-                  alertObj1.comment="unallowed services were enabled on port1 and allowedaccess was set on some ports";
-              }
-              else if((value.indexOf("port1")!=-1) && (value.length==1)){
-                  alertObj1.status="FIXED: disabled http and/or telnet on port1";
-                  alertObj1.comment="unallowed services were enabled on port1";
-              }
-              else if((value.indexOf("port1")==-1)){
-                  alertObj1.status="disabled all services on all ports beside port1";
-                  alertObj1.comment="allowedaccess was set on some ports";
-              }
-  
-              this.alertObjList.push(alertObj1);     
-            }           
-          });
-          resolve(output2);
-        },
-        (error)=>reject(error))
-       });
-      
-        promisesList1.push(promise1,promise2,promise3);
-        
-                 
-   
-    Promise.all(promisesList1)
-    .then(() => {
-      Promise.all(promisesList2)
-    .then(() => {
-      this.myLoading = false;
-      console.log(this.alertObjList);
-      
-    })
-    .catch(() => {
-      this.myLoading = false;
-    });
-      
-    })
-    .catch(() => {
-      
-    });
-   
-  
-     
- 
-  
-}
 
 getTimeout(data:string[]){
     this.myLoading=true;
-    this.service.getTimeout(data,this.headers).subscribe((output)=>{
+    this.firewallsGetService.getTimeout(data,this.headers).subscribe((output)=>{
       console.log(output);
       
       this.myLoading=false;
@@ -487,6 +367,21 @@ getTimeout(data:string[]){
   else{
     this.itemSelected=false;
   }
+ }
+
+ createReport(data:any){
+  
+  this.myLoading=true;
+  this.reportService.createReport(data,this.headers).then((alertObjects)=>{
+      console.log(alertObjects);
+      this.myLoading=false;     
+      
+  },(error)=>{
+    this.myLoading=false;
+    alert("there has been an error please try again")
+  }
+  )
+
  }
 
  showSiteHosts(site:string){

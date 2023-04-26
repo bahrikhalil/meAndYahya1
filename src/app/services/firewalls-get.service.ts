@@ -4,18 +4,14 @@ import { Router } from '@angular/router';
 import { AddressObject, alertObj, policy, ServiceObject, timeoutObj } from '../shared/firewalls-models';
 import { baseUrl, firewallsUrl } from '../shared/baseUrl';
 import { Observable, map, switchMap } from 'rxjs';
-interface HostsIpToName {
-  [key: string]: string;
-}
+
 interface Timeouts {
   [key: string]: string;
 }
 interface Neighbors {
   [key: string]: string[];
 }
-interface HostLists {
-  [key: string]: string[];
-}
+
 interface PortsCompliance {
   [key: string]: string[];
 }
@@ -23,101 +19,13 @@ interface Policys {
   [key: string]: policy[];
 }
 
-interface HttpOptions {
-  headers?: HttpHeaders;
-  context?: any;
-  responseType?: 'arraybuffer' | 'blob' | 'json' | 'text';
-  observe?: 'body';
-  reportProgress?: boolean;
-  withCredentials?: boolean;
-  params?: HttpParams;
-}
-
 
 @Injectable({
   providedIn: 'root'
 })
-export class FirewallsService {
-  bTunisiaHostList:String[]=[""];
-  bMoroccoHostList:String[]=[""];
-  siteHosts: HostLists={"TunisiaHostList":[],
-                        "MoroccoHostList": []
-                      }
-  
-hostsIpToNames:HostsIpToName = {'Switch1':'192.168.254.20',
-                  'Switch2':'192.168.254.18',
-                   'Router1':'5645',
-                  'Router2':'777'}
- 
- 
- public isLoading=false;
- public headers :any;
- public neighbors:Neighbors={};
+export class FirewallsGetService {
 
-  constructor(private http:HttpClient, private router:Router) { }
-
-  addDevice(data:string[],headers:HttpHeaders):Observable<any>{
-    console.log(data);
-    
-    return this.http.post<any>(firewallsUrl + "/api/firewalls/post/addDevice",{"hosts":data} , { 'headers': headers }).pipe(
-      map((data: any) => { return data; })
-    );
-  }
-
-  addPolicy(data:any,headers:HttpHeaders):Observable<any>{
-    return this.http.post<any>(firewallsUrl + "/api/firewalls/post/addPolicy", data, { 'headers': headers }).pipe(
-      map((data: any) => { return data; })
-    );
-  }
-  delPolicy(data:any,headers:HttpHeaders):Observable<any>{
-   return this.http.post<any>(firewallsUrl+"/api/firewalls/post/delPolicy",data,{'headers':headers}).pipe(
-      map((data:any)=> {return data})
-    )
-  }
-   
-  addServiceObject(data:any,headers:HttpHeaders):Observable<any>{
-   return this.http.post<any>(firewallsUrl+"/api/firewalls/post/addServiceObject",data,{'headers':headers}).pipe(
-      map((data:any)=> {return data})
-    )
-  }
-   delServiceObject(data:any,headers:HttpHeaders):Observable<any>{
-   return this.http.post<any>(firewallsUrl+"/api/firewalls/post/delServiceObject",data,{'headers':headers}).pipe(
-      map((data:any)=> {return data})
-    )
-  }
-   addAddressGrpObject(data:any,headers:HttpHeaders):Observable<any>{
-   return this.http.post<any>(firewallsUrl+"/api/firewalls/post/addAddressGrpObject",data,{'headers':headers}).pipe(
-      map((data:any)=> {return data})
-    )
-  }
-  delAddressGrpObject(data:any,headers:HttpHeaders):Observable<any>{
-   return this.http.post<any>(firewallsUrl+"/api/firewalls/post/delAddressGrpObject",data,{'headers':headers}).pipe(
-      map((data:any)=> {return data})
-    )
-  }
-  addServiceGrpObject(data:any,headers:HttpHeaders):Observable<any>{
-   return this.http.post<any>(firewallsUrl+"/api/firewalls/post/addServiceGrpObject",data,{'headers':headers}).pipe(
-      map((data:any)=> {return data})
-    )
-  }
-   delServiceGrpObject(data:any,headers:HttpHeaders):Observable<any>{
-   return this.http.post<any>(firewallsUrl+"/api/firewalls/post/addServiceGrpObject",data,{'headers':headers}).pipe(
-      map((data:any)=> {return data})
-    )
-  }
-
-   setGlobalSettings(data:any,hosts:any,headers:HttpHeaders):Observable<any>{
-    return this.http.post<any>(firewallsUrl+"/api/firewalls/post/setGlobalConfig/"+data,{"hosts":hosts},{'headers':headers}).pipe(
-       map((data:any)=> {return data})
-     )
-   }
-   setTimeout(data:any,headers:HttpHeaders):Observable<any>{
-   return this.http.post<any>(firewallsUrl+"/api/firewalls/post/setTimeout",data,{'headers':headers}).pipe(
-      map((data:any)=> {return data})
-    )
-  }
-
-
+  constructor(private http:HttpClient) { }
   public getHosts(site:string,headers:HttpHeaders,playPath: string):Observable<string[]>{
 
     return this.http.get<string[]>(firewallsUrl+playPath+site,{'headers':headers}).pipe(
@@ -182,14 +90,7 @@ hostsIpToNames:HostsIpToName = {'Switch1':'192.168.254.20',
      })
     );
    }
-   public getPortsCompliance(data:any,headers:HttpHeaders):Observable<PortsCompliance>{
-
-    return this.http.post<PortsCompliance>(baseUrl+"/api/firewalls/get/getPortsCompliance",{"hosts":data},{'headers':headers}).pipe(
-     map((output:PortsCompliance) =>{
-       return output;
-     })
-    );
-   }
+   
 
    public getBackup(data:string[],callback: ()=> void,headers:HttpHeaders):any{
   
@@ -231,16 +132,4 @@ hostsIpToNames:HostsIpToName = {'Switch1':'192.168.254.20',
    });
  }
    }
-
-   createAlertObj(type:string,name:string,comment:string,status:string,hosts:string):alertObj{
-    let alertObj1:alertObj = new alertObj();
-    alertObj1.subjectName=name;
-    alertObj1.subjectType=type;
-    alertObj1.comment=comment;
-    alertObj1.status=status;
-    alertObj1.hosts=hosts;
-    return alertObj1;
-   }
-
-
 }

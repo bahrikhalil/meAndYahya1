@@ -2,7 +2,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DataSet } from 'vis-data';
 import { Network } from 'vis-network';
-import { BackendService } from './backend.service';
+import { SwitchesGetService } from './switches-get.service';
 import { TerminalService } from './terminal.service';
 
 interface Neighbors {
@@ -16,7 +16,7 @@ export class NetworkTopologyService {
   
 hosts:String[]=[];  
 
-constructor(private termService:TerminalService, private service:BackendService) {
+constructor(private termService:TerminalService, private service:SwitchesGetService) {
   this.hosts = JSON.parse(localStorage.getItem('hosts')!);
  }
 
