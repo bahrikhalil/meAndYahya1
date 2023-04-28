@@ -7,16 +7,16 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { MatButtonModule} from '@angular/material/button'
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { alertObj, issueObj } from '../shared/switchs-models';
-import { NetworkTopologyService } from '../services/network-topology.service';
-import { SwitchesGetService } from '../services/switches-get.service';
-import { SwitchesPostService } from '../services/switches-post.service';
+import { alertObj, issueObj } from '../../shared/switchs-models';
+import { NetworkTopologyService } from '../../services/network-topology.service';
+import { SwitchesGetService } from '../../services/switches-get.service';
+import { SwitchesPostService } from '../../services/switches-post.service';
 import { SwitchesVlansComponent } from '../switches-vlans/switches-vlans.component';
 import { SwitchesInterfacesComponent } from '../switches-interfaces/switches-interfaces.component';
 import { SwitchesSystemConfComponent } from '../switches-system-conf/switches-system-conf.component';
 import { ReportSwitchesComponent } from '../report-switches/report-switches.component';
-import { CreateReportSwitchesService } from '../services/create-report-switches.service';
-import { vlan,vlanInt,trunk, VlanInfo, IntInfo } from '../shared/switchs-models';
+import { CreateReportSwitchesService } from '../../services/create-report-switches.service';
+import { vlan,vlanInt,trunk, VlanInfo, IntInfo } from '../../shared/switchs-models';
 
 
 interface Neighbors {

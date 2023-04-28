@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SwitchsComponent } from '../switchs/switchs.component';
 import { AnyForUntypedForms, FormControl,FormGroup } from '@angular/forms';
-import { vlan,vlanInt,trunk, VlanInfo, IntInfo } from '../shared/switchs-models';
+import { vlan,vlanInt,trunk, VlanInfo, IntInfo } from '../../shared/switchs-models';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { data, DataSet, Network } from 'vis-network/standalone';
@@ -10,10 +10,10 @@ import vis from 'vis-network/declarations/index-legacy-bundle';
 import { Terminal } from 'xterm';
 import { HttpHeaders } from '@angular/common/http';
 import { Route, Router } from '@angular/router';
-import { TerminalService } from '../services/terminal.service';
-import { NetworkTopologyService } from '../services/network-topology.service';
-import { SwitchesGetService } from '../services/switches-get.service';
-import { SwitchesPostService } from '../services/switches-post.service';
+import { TerminalService } from '../../services/terminal.service';
+import { NetworkTopologyService } from '../../services/network-topology.service';
+import { SwitchesGetService } from '../../services/switches-get.service';
+import { SwitchesPostService } from '../../services/switches-post.service';
 
 
 

@@ -3,13 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router, Routes } from '@angular/router';
 
-import { policy, alertObj, timeoutObj } from '../shared/firewalls-models';
+import { policy, alertObj, timeoutObj } from '../../shared/firewalls-models';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { MatButtonModule} from '@angular/material/button'
 import { Observable } from 'rxjs';
-import { FirewallsGetService } from '../services/firewalls-get.service';
-import { FirewallsPostService } from '../services/firewalls-post.service';
-import { CreateReportFirewallsService } from '../services/create-report-firewalls.service';
+import { FirewallsGetService } from '../../services/firewalls-get.service';
+import { FirewallsPostService } from '../../services/firewalls-post.service';
+import { CreateReportFirewallsService } from '../../services/create-report-firewalls.service';
 
 
 
