@@ -11,7 +11,11 @@ import { alertObj, issueObj } from '../shared/switchs-models';
 import { NetworkTopologyService } from '../services/network-topology.service';
 import { SwitchesGetService } from '../services/switches-get.service';
 import { SwitchesPostService } from '../services/switches-post.service';
+import { SwitchesVlansComponent } from '../switches-vlans/switches-vlans.component';
+import { SwitchesInterfacesComponent } from '../switches-interfaces/switches-interfaces.component';
+import { SwitchesSystemConfComponent } from '../switches-system-conf/switches-system-conf.component';
 import { CreateReportSwitchesService } from '../services/create-report-switches.service';
+import { vlan,vlanInt,trunk, VlanInfo, IntInfo } from '../shared/switchs-models';
 
 
 interface Neighbors {
@@ -39,6 +43,8 @@ interface HostLists {
 })
 
 export class SwitchsComponent implements OnInit {
+
+  
   
   isAccepted = false;
   isDenied = false;
@@ -57,13 +63,17 @@ export class SwitchsComponent implements OnInit {
   issue:IssueObjList = {};
   issuemap:IssueMap= {};
   neigh:Neighbors = {};
+  vlanInfo:VlanInfo=new VlanInfo;
+  currVlanInfo:VlanInfo[]=[];
+  currIntInfo:IntInfo[]=[];
 
   constructor(private topologyService:NetworkTopologyService,
     private route:Router,
     private switchesGetService:SwitchesGetService,
     private switchesPostService:SwitchesPostService,
     private reportService:CreateReportSwitchesService
-     ) { 
+     ){
+
     this.hosts = JSON.parse(localStorage.getItem('hosts')!);
   }
 
@@ -74,6 +84,7 @@ export class SwitchsComponent implements OnInit {
     'user': localStorage.getItem("user")!,
     Authorization: "Bearer "+ localStorage.getItem("usertoken"),
   });
+  
   
    
     Object.entries(this.siteHosts).forEach(([key,value])=>{     
@@ -92,14 +103,9 @@ export class SwitchsComponent implements OnInit {
       });    
 
   }
-addDevice(data:any){
-    this.myLoading=true;
-    this.switchesPostService.addDevice(data,this.headers).subscribe((data)=>{
-      console.log(data);
-      this.myLoading=false;  
-    },(error)=>{alert("there has been an error please try again")}
-    )
-  }
+
+ 
+
 
 networkTopology(){
   this.myLoading=true;
@@ -117,15 +123,7 @@ networkTopology(){
 }
 
   
-  onAcceptClick() {
-    this.isAccepted = true;
-    this.isDenied = false;
-  }
-
-  onDenyClick() {
-    this.isAccepted = false;
-    this.isDenied = true;
-  }
+ 
   onItemSelect(event: any, item: String) {
     if (event.target.checked) {
       // Add item to selectedItems array
@@ -184,32 +182,9 @@ networkTopology(){
   console.log(this.contentList);
 
 }
-setGlobalConfig(data:string,hosts:any){
-  this.myLoading=true;
-  this.switchesPostService.setGlobalConfig(data,hosts,this.headers).subscribe(()=>{
-     this.myLoading=false;
 
-  },(error)=>{
-    this.myLoading=false;
-    alert("there has been an error please try again")
-  }
-  )
-}
 
- createReport(data:any){
-  
-  this.myLoading=true;
-  this.reportService.createReport(data,this.headers).then((alertObjects)=>{
-      console.log(alertObjects);
-      this.myLoading=false;     
-      
-  },(error)=>{
-    this.myLoading=false;
-    alert("there has been an error please try again")
-  }
-  )
 
- }
  
 
   

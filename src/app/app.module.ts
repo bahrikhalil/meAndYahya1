@@ -24,6 +24,14 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule, Routes }   from '@angular/router';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { SwitchesVlansComponent } from './switches-vlans/switches-vlans.component';
+import { SwitchesInterfacesComponent } from './switches-interfaces/switches-interfaces.component';
+import { SwitchesSystemConfComponent } from './switches-system-conf/switches-system-conf.component';
+import { PolicysComponent } from './policys/policys.component';
+import { ServiceObjectsComponent } from './service-objects/service-objects.component';
+import { AddressObjectsComponent } from './address-objects/address-objects.component';
+import { ReportSwitchesComponent } from './report-switches/report-switches.component';
+import { ReportFirewallsComponent } from './report-firewalls/report-firewalls.component';
 
 
 
@@ -36,7 +44,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     
        LoginComponent,
       
-       AboutComponent,  SwitchsComponent, FirewallsComponent,PerCountryOrGroupComponent, 
+       AboutComponent,  SwitchsComponent, FirewallsComponent,PerCountryOrGroupComponent, SwitchesVlansComponent, SwitchesInterfacesComponent, SwitchesSystemConfComponent, PolicysComponent, ServiceObjectsComponent, AddressObjectsComponent, ReportSwitchesComponent, ReportFirewallsComponent, 
   ],
   imports: [
     BrowserModule,

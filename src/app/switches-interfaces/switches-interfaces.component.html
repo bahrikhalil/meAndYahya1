@@ -1,0 +1,25 @@
+
+<table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">intName</th>
+        <th scope="col">ipv4</th>
+        <th scope="col">status</th>
+        <th scope="col">lineProtocol</th>
+        <th scope="col">mode</th>
+        <th scope="col">allowedVlans</th>
+
+      </tr>
+    </thead>
+    <tr *ngFor ="let curr1 of currIntInfo">
+      
+      <td>{{curr1.intName}}</td>
+      <td>{{curr1.ipv4}} </td>
+      <td>{{curr1.status}}</td>
+      <td>{{curr1.lineProtocol}}</td>
+      <td>{{curr1.portType}}</td>
+      <td>{{curr1.allowedVlans}}</td>
+    
+    </tr>
+    
+  </table> 

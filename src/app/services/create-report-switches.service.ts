@@ -4,6 +4,7 @@ import { map, Observable , switchMap, tap, throwError  } from 'rxjs';
 import { Router ,NavigationExtras} from '@angular/router';
 import {log_user,VlanInfo,IntInfo, issueObj, alertObj} from '../shared/switchs-models';
 import { baseUrl,firewallsUrl } from '../shared/baseUrl';
+import { SwitchesGetService } from './switches-get.service';
 
 interface Neighbors {
   [key: string]: string[];
@@ -34,7 +35,18 @@ export class CreateReportSwitchesService {
  issue:IssueObjList = {};
  issuemap:IssueMap= {};                   
 
-  constructor( private  http :HttpClient,private router:Router) { }
+  constructor( private  http :HttpClient,private router:Router,private switchesGetService:SwitchesGetService) { }
+  ngOnInit(): void {
+
+    this.headers = new HttpHeaders({
+      'user': localStorage.getItem("user")!,
+      Authorization: "Bearer "+ localStorage.getItem("usertoken"),
+    });
+
+
+    this.triggerSystemCompliance(["Individuals","192.168.254.18"],this.headers);
+    this.switchesGetService.getACL("192.168.254.18",this.headers);
+  }
   public triggerGetACLCompliance(data:any,headers:HttpHeaders):Observable<IssueObjList>{
     
     return this.http.post<IssueObjList>(baseUrl+"/api/switchs/get/triggerGetACLCompliance",{"hosts":data},{'headers':headers}).pipe(

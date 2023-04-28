@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient ,HttpHeaders, HttpParams } from '@angular/common/http';
 import { map, Observable , switchMap, tap, throwError  } from 'rxjs';
 import { Router ,NavigationExtras} from '@angular/router';
-import {VlanInfo,IntInfo} from '../shared/switchs-models';
+import {VlanInfo,IntInfo,issueObj, alertObj} from '../shared/switchs-models';
 import { baseUrl } from '../shared/baseUrl';
+
+
 
 interface Neighbors {
   [key: string]: string[];
@@ -11,6 +13,12 @@ interface Neighbors {
 
 interface HostLists {
   [key: string]: String[];
+}
+interface IssueObjList {
+  [key: string]: issueObj[];
+}
+interface IssueMap {
+  [key: string]: string;
 }
 
 
@@ -75,6 +83,7 @@ public triggerGetVlans(data:String,headers:HttpHeaders):Observable<VlanInfo[]>{
    })
   );
  }
+
  public getNeighbors(hostListName:string,headers:HttpHeaders,callback: ()=> void):Observable<Neighbors>{
    let hosts =JSON.parse(localStorage.getItem(hostListName)!);
   return this.http.post<Neighbors>(baseUrl+"/api/switchs/get/getNeighbors",{hosts},{'headers':headers}).pipe(
@@ -82,9 +91,17 @@ public triggerGetVlans(data:String,headers:HttpHeaders):Observable<VlanInfo[]>{
      return data;
      
    })
-  )
-  
+  ) 
  }
+ public getACL(data:any,headers:HttpHeaders):Observable<IssueMap>{
+      
+  return this.http.post<IssueMap>(baseUrl+"/api/switchs/get/getACL",{"hosts":data},{'headers':headers}).pipe(
+   map((output:IssueMap) =>{
+     return output;
+   })
+  );
+ }
+
  
  public getBackup(data:string[],callback: ()=> void,headers:HttpHeaders):any{
  

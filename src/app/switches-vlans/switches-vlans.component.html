@@ -1,0 +1,18 @@
+<table>
+<thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">Name</th>
+      <th scope="col">status</th>
+      <th scope="col">ports</th>
+    </tr>
+  </thead>
+  <tr *ngFor ="let curr of currVlanInfo">
+    <td>{{curr.id}}</td>
+    <td>{{curr.name}}</td>
+    <td>{{curr.status}} </td>
+    <td>{{curr.ports}}</td>
+  
+  </tr>
+  
+</table>
