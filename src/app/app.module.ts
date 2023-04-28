@@ -43,7 +43,7 @@ import { ReportFirewallsComponent } from './report-firewalls/report-firewalls.co
     AppComponent,
     
        LoginComponent,
-      
+      ReportSwitchesComponent,
        AboutComponent,  SwitchsComponent, FirewallsComponent,PerCountryOrGroupComponent, SwitchesVlansComponent, SwitchesInterfacesComponent, SwitchesSystemConfComponent, PolicysComponent, ServiceObjectsComponent, AddressObjectsComponent, ReportSwitchesComponent, ReportFirewallsComponent, 
   ],
   imports: [

@@ -11,6 +11,7 @@ import { SwitchesPostService } from '../services/switches-post.service';
 import { CreateReportSwitchesService } from '../services/create-report-switches.service';
 import { vlan,vlanInt,trunk, VlanInfo, IntInfo } from '../shared/switchs-models';
 import { FormGroup, FormControl } from '@angular/forms';
+import { HttpHeaders } from '@angular/common/http';
 
 interface Neighbors {
   [key: string]: string[];
@@ -34,9 +35,9 @@ interface HostLists {
 })
 export class SwitchesSystemConfComponent implements OnInit {
 
-  country:String="";
-  hosts:String[]=[];
-  shownHosts:String[]=[];
+  country:string="";
+  hosts:string[]=[];
+  shownHosts:string[]=[];
   formdata:any;
   vlanInfo:VlanInfo=new VlanInfo;
   currVlanInfo:VlanInfo[]=[];
@@ -83,9 +84,27 @@ export class SwitchesSystemConfComponent implements OnInit {
       priority: new FormControl(""),
       portType: new FormControl("")
 
-
-
    });
+   this.headers = new HttpHeaders({
+    'user': localStorage.getItem("user")!,
+    Authorization: "Bearer "+ localStorage.getItem("usertoken"),
+  });
+
+
+  this.switchesGetService.triggerSystemCompliance(this.hosts,this.headers).subscribe((data)=>{
+    console.log(data);    
+  },
+  (error)=>{
+   console.log(error);
+    
+  });
+  this.switchesGetService.getACL(this.hosts[1],this.headers).subscribe((data)=>{
+    console.log(data);   
+  },
+  (error)=>{
+    console.log(error);
+    
+  });
   }
 
   onSaveSetBridgePriority(data:any){

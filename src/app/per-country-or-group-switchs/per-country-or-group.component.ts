@@ -75,14 +75,8 @@ export class PerCountryOrGroupComponent implements OnInit {
       Authorization: "Bearer "+ localStorage.getItem("usertoken"),
       user: "bahri"
     }); 
-    
-      this.myLoading=true;
-      this.switchesGetService.getNeighbors(localStorage.getItem("lastSite")!,this.headers,()=>{}).subscribe((data)=>{
-      this.myLoading=false;
-      this.neigh=data;
-      this.topologyService.buildTopology(this.neigh);
-     })      
-  
+          
+
 
     this.formdata= new FormGroup({
       ipAddress: new FormControl(""),

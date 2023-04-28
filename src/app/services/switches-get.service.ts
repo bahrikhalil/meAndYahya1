@@ -75,10 +75,10 @@ public triggerGetVlans(data:String,headers:HttpHeaders):Observable<VlanInfo[]>{
    );
   }
   
- public getHosts(site:String,headers:HttpHeaders,playPath: string):Observable<String[]>{
+ public getHosts(site:String,headers:HttpHeaders,playPath: string):Observable<string[]>{
 
- return this.http.get<String[]>(baseUrl+playPath+site,{'headers':headers}).pipe(
-   map((data:String[])=>{
+ return this.http.get<string[]>(baseUrl+playPath+site,{'headers':headers}).pipe(
+   map((data:string[])=>{
      return data;
    })
   );
@@ -146,5 +146,41 @@ else{
  }
  );
 }
+ }
+
+ public triggerGetACLCompliance(data:any,headers:HttpHeaders):Observable<IssueObjList>{
+    
+  return this.http.post<IssueObjList>(baseUrl+"/api/switchs/get/triggerGetACLCompliance",{"hosts":data},{'headers':headers}).pipe(
+   map((output:IssueObjList) =>{
+     return output;
+   })
+  );
+ }
+
+ public triggerLineCompliance(data:any,headers:HttpHeaders):Observable<IssueObjList>{
+    
+  return this.http.post<IssueObjList>(baseUrl+"/api/switchs/get/triggerLineCompliance",{"hosts":data},{'headers':headers}).pipe(
+   map((output:IssueObjList) =>{
+     return output;
+   })
+  );
+ }
+
+ public triggerPortCompliance(data:any,headers:HttpHeaders):Observable<IssueObjList>{
+    
+  return this.http.post<IssueObjList>(baseUrl+"/api/switchs/get/triggerPortCompliance",{"hosts":data},{'headers':headers}).pipe(
+   map((output:IssueObjList) =>{
+     return output;
+   })
+  );
+ }
+
+ public triggerSystemCompliance(data:any,headers:HttpHeaders):Observable<IssueMap>{
+    
+  return this.http.post<IssueMap>(baseUrl+"/api/switchs/get/triggerSystemCompliance",{"hosts":data},{'headers':headers}).pipe(
+   map((output:IssueMap) =>{
+     return output;
+   })
+  );
  }
 }

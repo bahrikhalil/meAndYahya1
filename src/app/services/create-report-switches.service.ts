@@ -33,9 +33,12 @@ export class CreateReportSwitchesService {
  public headers :any;
  public neighbors:Neighbors={};
  issue:IssueObjList = {};
- issuemap:IssueMap= {};                   
+ issuemap:IssueMap= {};  
+ hosts:any;                 
 
-  constructor( private  http :HttpClient,private router:Router,private switchesGetService:SwitchesGetService) { }
+  constructor( private  http :HttpClient,private router:Router,private switchesGetService:SwitchesGetService) { 
+    this.hosts = JSON.parse(localStorage.getItem('hosts')!);
+  }
   ngOnInit(): void {
 
     this.headers = new HttpHeaders({
@@ -43,45 +46,16 @@ export class CreateReportSwitchesService {
       Authorization: "Bearer "+ localStorage.getItem("usertoken"),
     });
 
+   
+    this.createReport(this.hosts,this.headers).then((data)=>{
+     console.log(data);
+     
+    },
+    (error)=>{
 
-    this.triggerSystemCompliance(["Individuals","192.168.254.18"],this.headers);
-    this.switchesGetService.getACL("192.168.254.18",this.headers);
+    });
   }
-  public triggerGetACLCompliance(data:any,headers:HttpHeaders):Observable<IssueObjList>{
-    
-    return this.http.post<IssueObjList>(baseUrl+"/api/switchs/get/triggerGetACLCompliance",{"hosts":data},{'headers':headers}).pipe(
-     map((output:IssueObjList) =>{
-       return output;
-     })
-    );
-   }
-  
-   public triggerLineCompliance(data:any,headers:HttpHeaders):Observable<IssueObjList>{
-      
-    return this.http.post<IssueObjList>(baseUrl+"/api/switchs/get/triggerLineCompliance",{"hosts":data},{'headers':headers}).pipe(
-     map((output:IssueObjList) =>{
-       return output;
-     })
-    );
-   }
-  
-   public triggerPortCompliance(data:any,headers:HttpHeaders):Observable<IssueObjList>{
-      
-    return this.http.post<IssueObjList>(baseUrl+"/api/switchs/get/triggerPortCompliance",{"hosts":data},{'headers':headers}).pipe(
-     map((output:IssueObjList) =>{
-       return output;
-     })
-    );
-   }
-  
-   public triggerSystemCompliance(data:any,headers:HttpHeaders):Observable<IssueMap>{
-      
-    return this.http.post<IssueMap>(baseUrl+"/api/switchs/get/triggerSystemCompliance",{"hosts":data},{'headers':headers}).pipe(
-     map((output:IssueMap) =>{
-       return output;
-     })
-    );
-   }
+
    createAlertObj(type:string,name:string,comment:string,status:string,hosts:string):alertObj{
     let alertObj1:alertObj = new alertObj();
     alertObj1.subjectName=name;
@@ -99,7 +73,7 @@ export class CreateReportSwitchesService {
         }
         let alertObjList:alertObj[] = [];  
         const promise1 = new Promise((resolve,reject)=>{
-          this.triggerLineCompliance(data,headers)
+          this.switchesGetService.triggerLineCompliance(data,headers)
           .subscribe((response)=> {
            // this.issue=response;
             Object.entries(response).forEach((key)=>{
@@ -118,7 +92,7 @@ export class CreateReportSwitchesService {
           )
         });
         const promise2 = new Promise((resolve,rejecet)=>{
-          this.triggerSystemCompliance(data,headers)
+          this.switchesGetService.triggerSystemCompliance(data,headers)
           .subscribe((response)=> {
           
             Object.entries(response).forEach((key)=>{
@@ -137,7 +111,7 @@ export class CreateReportSwitchesService {
         });
       
         const promise3 = new Promise((resolve,rejecet)=>{
-          this.triggerPortCompliance(data,headers)
+          this.switchesGetService.triggerPortCompliance(data,headers)
           .subscribe((response)=> {
             console.log(response);
             
@@ -158,7 +132,7 @@ export class CreateReportSwitchesService {
           )
         });
         const promise4 = new Promise((resolve,rejecet)=>{
-          this.triggerGetACLCompliance(data,headers).subscribe(
+          this.switchesGetService.triggerGetACLCompliance(data,headers).subscribe(
             (response)=> {
               Object.entries(response).forEach((key)=>{
                 key[1].forEach((element)=>{

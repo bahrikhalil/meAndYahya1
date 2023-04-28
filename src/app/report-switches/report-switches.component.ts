@@ -67,6 +67,7 @@ export class ReportSwitchesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.createReport(this.hosts);
   }
   createReport(data:any){
   

@@ -89,7 +89,7 @@ export class SwitchesInterfacesComponent implements OnInit {
     Authorization: "Bearer "+ localStorage.getItem("usertoken"),
   });
 
-   this.onHostClickShowInt("192.168.254.18");
+   this.onHostClickShowInt(localStorage.getItem("currentHost")!);
   }
 
   onSaveAddVlanInt(data:any){

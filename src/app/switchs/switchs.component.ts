@@ -14,6 +14,7 @@ import { SwitchesPostService } from '../services/switches-post.service';
 import { SwitchesVlansComponent } from '../switches-vlans/switches-vlans.component';
 import { SwitchesInterfacesComponent } from '../switches-interfaces/switches-interfaces.component';
 import { SwitchesSystemConfComponent } from '../switches-system-conf/switches-system-conf.component';
+import { ReportSwitchesComponent } from '../report-switches/report-switches.component';
 import { CreateReportSwitchesService } from '../services/create-report-switches.service';
 import { vlan,vlanInt,trunk, VlanInfo, IntInfo } from '../shared/switchs-models';
 
@@ -30,7 +31,7 @@ interface IssueMap {
 }
 
 interface HostLists {
-  [key: string]: String[];
+  [key: string]: string[];
 }
 
 @Component({
@@ -51,14 +52,15 @@ export class SwitchsComponent implements OnInit {
   itemSelected=false;
   panelOpen = false;
   myLoading= false;
-  contentList=[0,0,0];
-  individualsList:String[]=[];
-  hosts:String[]=[];
+  contentList=[0,0,0,0,0,0,0,0,0,0];
+  individualsList:string[]=[];
+  hosts:string[]=[];
   selectedItem:String="";
   hoveredIndex = -1;
   headers:any;
   sites:string[]=["Morocco_switchs","Tunisia_switchs"];
   siteHosts: HostLists={"Tunisia_switchs":[],"Morocco_switchs": [] }
+  currentSite:string="Morocco_switchs";
   alertObjList:alertObj[]=[];
   issue:IssueObjList = {};
   issuemap:IssueMap= {};
@@ -90,7 +92,7 @@ export class SwitchsComponent implements OnInit {
     Object.entries(this.siteHosts).forEach(([key,value])=>{     
       if(JSON.parse(localStorage.getItem(key)!)==null){   
         this.switchesGetService.getHosts(key.split("_")[0],this.headers,"/api/switchs/post/triggerGetSwitchs/").subscribe(
-          (data:String[])=>{
+          (data:string[])=>{
             this.siteHosts[key]=data;
             this.siteHosts[key]= this.siteHosts[key].map(item => item.replace(/"/g, ''));
             localStorage.setItem(key,JSON.stringify(this.siteHosts[key]))
@@ -101,7 +103,8 @@ export class SwitchsComponent implements OnInit {
         } 
         else this.siteHosts[key]=JSON.parse(localStorage.getItem(key)!);
       });    
-
+      console.log(this.siteHosts);
+      
   }
 
  
@@ -110,7 +113,7 @@ export class SwitchsComponent implements OnInit {
 networkTopology(){
   this.myLoading=true;
   this.changeContent(1);
-  this.switchesGetService.getNeighbors(localStorage.getItem("lastSite")!,this.headers,()=>{}).subscribe((data)=>{
+  this.switchesGetService.getNeighbors(localStorage.getItem("currentSite")!,this.headers,()=>{}).subscribe((data)=>{
   this.myLoading=false;
   this.neigh=data;
   this.topologyService.buildTopology(this.neigh); 
@@ -122,49 +125,25 @@ networkTopology(){
  )   
 }
 
-  
- 
-  onItemSelect(event: any, item: String) {
-    if (event.target.checked) {
-      // Add item to selectedItems array
-      this.individualsList.push(item);
-    } else {
-      // Remove item from selectedItems array
-      const index = this.individualsList.indexOf(item);
-      if (index !== -1) {
-        this.individualsList.splice(index, 1);
-      }
-    }
-    this.itemIsSelected();
-    console.log(this.individualsList);
-    console.log(this.itemSelected);
-    
-  }
- itemIsSelected(){
-  if(this.individualsList.length !=0){
-    this.itemSelected=true;
-  }
-  else{
-    this.itemSelected=false;
-  }
- }
-
- showSiteHosts(site:string){
+getBackUp(data:any){
   this.myLoading=true;
+  this.switchesGetService.getBackup(data,()=> this.myLoading=false,this.headers);
+}
+
+
+ setCurrentSite(site:string){
   this.hosts=[site];
   localStorage.setItem('hosts', JSON.stringify(this.hosts));
+  //console.log(this.hosts);
+  //this.networkTopology()
+  localStorage.setItem('currentSite',site);  
+ }
+ setCurrentHost(host:string,contentNum:number){
+  this.hosts=["Individuals",host];
+  localStorage.setItem('hosts', JSON.stringify(this.hosts));
+  localStorage.setItem('currentHost',host);  
   console.log(this.hosts);
-  this.switchesGetService.getNeighbors(site,this.headers,()=>{}).subscribe((data)=>{
-    this.myLoading=false;
-    localStorage.setItem('lastSite',site)
-    this.route.navigate(["/per-country-or-group"]);
-
-  },(error)=>{
-    this.myLoading=false;
-    alert("there has been an error please try again")
-  }
-  );
-  
+  this.changeContent(contentNum);
  }
  showIndividuals(){
   this.hosts=["Individuals"];
@@ -172,14 +151,12 @@ networkTopology(){
     this.hosts.push(item);
   })
   localStorage.setItem('hosts', JSON.stringify(this.hosts));
-  this.route.navigate(["/per-country-or-group"]);
  }
 
 
  changeContent(data:any){
   this.contentList = this.contentList.map(num => num === 1 ? 0 : num);
   this.contentList[data]=1;
-  console.log(this.contentList);
 
 }
 
