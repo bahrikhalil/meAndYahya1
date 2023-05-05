@@ -41,13 +41,14 @@ export class vlan{
   
     vlanId:String="";
     vlanName:String="";
-
+    ports:string="";
     intType:String="";
     intId:String="";
     hosts:String[]=[];
-    public feedback(vlanId:String,hosts:String[],vlanName:String,intId:String,intType:String){
+    public feedback(vlanId:String,hosts:String[],vlanName:String,intId:String,intType:String,ports:string){
        this.vlanName=vlanName; 
         this.vlanId=vlanId ; 
+        this.ports=ports;
         this.intId= intId;
         this.intType=intType;
         this.hosts=hosts; 

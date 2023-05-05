@@ -21,3 +21,84 @@ table {
     font-weight: bold;
   }
   
+
+.example-h2 {
+  margin: 10px;
+}
+
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+.example-margin {
+  margin: 10px;
+}
+
+// @import '../../../../node_modules/@fortawesome/fontawesome-free/css/all.css';
+
+.pointer{
+  cursor: pointer;
+}
+.cont{
+  display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5), 0 5px 5px -5px rgba(0, 0, 0, 0.5);
+    margin-top: 50px;
+    margin-left: 10px;
+    margin-right: 150px;
+    
+    background-color: rgb(242, 242, 242);
+}
+.vlan-form {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+.btn-primary:hover {
+  background-color: #0069d9;
+}
+
+button{
+  margin-top: 10%;
+}
+
+
+:host ::ng-deep .dropdown-list {
+  position: relative !important;
+ 
+}

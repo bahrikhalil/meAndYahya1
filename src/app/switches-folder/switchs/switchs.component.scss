@@ -1,41 +1,4 @@
-.panel-header{
-    width: 800px; /* Set the desired width */
-    padding: 4px 8px; /* Adjust padding as needed */
-    margin: 0; /* Remove any margin */
-    box-sizing: border-box; /* Make sure padding and border are included in the width */
-    
-  }
 
-  .list-item {
-    cursor: pointer;
-   
-  }
-  
-  .list-item:hover,
-  .list-item:checked {
-    background-color: black;
-    color: white;
-  }
-
-  .main {
-    margin: 20px auto;
-    width: 80%;
-    text-align: center;
-  }
-  
-  .button-group {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modify-config-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 
-  
-  }
   .loading-wrapper {
     position: fixed;
     top: 0;
@@ -70,69 +33,8 @@
     }
   }
   
-  nav {
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background-color: rgb(2, 146, 35);
-    color: #fff;
-  }
   
-  .brand-logo {
-    font-size: 1.5rem;
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  .nav-links {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .nav-links li {
-    margin-left: 1rem;
-  }
-  
-  .nav-links a {
-    font-size: 1.2rem;
-    color: inherit;
-    text-decoration: none;
-  }
-  .navbar {
-    background-color: rgb(54, 60, 47);
-    color: #fff;
-    height: 100%;
-    width: 320px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    overflow-x: hidden;
-    
-    display: flex;
-  }
-  
-  .mat-expansion-panel-header {
-    font-size: 18px;
-    
-    letter-spacing: 1px;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .mat-list-item {
-    height: 48px;
-  }
-  
-  .mat-list-item .mat-icon {
-    color: #fff;
-    margin-right: 10px;
-  }
-  
-  .mat-expansion-panel-content {
-    background-color: #666;
-    color: #fff;
-  }
+//---------------------------------------------NAVBAR-------------------------------------------------------->
   
   .spacer {
     flex: 1 1 auto;
@@ -142,67 +44,13 @@
     
   }
   .mat-toolbar{
-      background-color: rgb(117, 9, 9);
+      background-color: #0b6c1b;
+      height: 50px;
   }
   
-  
-  form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 8px;
-    margin-right: 200px;
-    margin-left: 10px;
-    margin-bottom: 20px;
-    height: 500px;
-    box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.2);
-    
-  }
-  
-  .switch-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  
-    span {
-      margin-right: 10px;
-    }
-  }
-  
-  .action-container {
-    display: flex;
-  
-    button {
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-      margin-right: 10px;
-      background-color: #fff;
-      color: #333;
-      cursor: pointer;
-    }
-  
-    .accept {
-      background-color: #fff;
-      color: #333;
-    }
-  
-    .deny {
-      background-color: #fff;
-      color: #333;
-    }
-  
-    .accept.active {
-      background-color: red;
-      color: #fff;
-    }
-  
-    .deny.active {
-      background-color: red;
-      color: #fff;
-    }
-  }
 
+
+// ------------------------------- table style------------------------------------------------------------------------->
   table {
     border-collapse: collapse;
     width: 100%;
@@ -225,3 +73,77 @@
     background-color: #ccc;
     font-weight: bold;
   }
+
+// --------------------------------------------------SIDENAV----------------------------------------------------------------------
+
+
+  
+.navbar {
+  background-color: rgb(54, 60, 47);
+  color: #fff;
+  height: 100%;
+  width: 320px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  display: flex;
+}
+
+ .mat-expansion-panel{
+  border-radius: 0px;
+  box-shadow: none;
+}
+
+
+
+// .mat-list-base .mat-list-item{
+//   background-color: #fffdfd0f;
+// }
+
+.mat-list-base .mat-list-item .mat-list-item-content {
+  padding: 0px;
+}
+
+mat-expansion-panel mat-expansion-panel-header span{
+  color: white;
+}
+
+mat-expansion-panel mat-expansion-panel-header:hover{
+  background-color: #0a4f06 !important;
+}
+
+.mat-expanded .hed{ 
+  background-color: #0a4f06;
+}
+.mat-expanded .subhed{ 
+  background-color: #4b7c48;
+}
+
+
+
+mat-list mat-list-item{
+  width: 320px; margin: 0px -23px;
+  padding: 0px;
+  //color: white;
+}
+mat-list mat-list-item:hover{
+  background-color: blue;
+}
+
+ mat-expansion-panel-header {
+  background-color: rgb(54, 60, 47); /* change the hover background color */
+}
+
+.routing-bc{
+  background-color: blue;
+}
+
+
+
+
+
+.mat-sidenav-content {
+  height: 100%;
+  overflow: visible;
+}

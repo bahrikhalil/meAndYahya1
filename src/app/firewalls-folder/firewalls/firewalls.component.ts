@@ -66,8 +66,8 @@ export class FirewallsComponent implements OnInit {
   ngOnInit(): void {
 
    this.headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-    Authorization: "Bearer "+ localStorage.getItem("usertoken"),
+    'user': localStorage.getItem("user")!,
+    Authorization: "bearer "+ localStorage.getItem("usertoken"),
   });
   this.formdata= new FormGroup({
     name: new FormControl("po"),
@@ -90,6 +90,7 @@ export class FirewallsComponent implements OnInit {
    
 
   });
+  console.log(this.firewalls);
   
    
     Object.entries(this.siteHosts).forEach(([key,value])=>{     
@@ -104,7 +105,7 @@ export class FirewallsComponent implements OnInit {
             
           });      
         } 
-        else this.siteHosts[key]=JSON.parse(localStorage.getItem(key) || 'default value');
+        else this.siteHosts[key]=JSON.parse(localStorage.getItem(key)!);
       });  
       
      // this.showPolicys(["Individuals","192.168.254.10"]);
@@ -114,19 +115,7 @@ export class FirewallsComponent implements OnInit {
       this.contentList = this.contentList.map(num => num === 1 ? 0 : num);
       this.contentList[data]=1;
       console.log(this.contentList);
-      
-
  }
-
-   onAcceptClick() {
-    this.isAccepted = true;
-    this.isDenied = false;
-  }
-
-  onDenyClick() {
-    this.isAccepted = false;
-    this.isDenied = true;
-  }
 
   addDevice(data:string[]){
    
@@ -151,7 +140,7 @@ export class FirewallsComponent implements OnInit {
     this.policy.service=data.service;
     this.policy.schedule=data.schedule;
     this.policy.status=data.status;   
-    this.policy.hosts = JSON.parse(localStorage.getItem('firewalls') || 'default value');
+    this.policy.hosts = JSON.parse(localStorage.getItem('firewalls')!);
     this.firewallsPostService.addPolicy(this.policy,this.headers).subscribe((data)=>{
       console.log("done");
       
@@ -243,18 +232,20 @@ export class FirewallsComponent implements OnInit {
     this.myLoading=true;
     this.timeout.timeout=data;
     if(hosts.length==0)
-    this.timeout.hosts = JSON.parse(localStorage.getItem('firewalls') || 'default value');
+    this.timeout.hosts = JSON.parse(localStorage.getItem('firewalls')!);
     else this.timeout.hosts=hosts;
    return this.firewallsPostService.setTimeout(this.timeout,this.headers)
   }
 
 
   getPolicys(data:any){
+    console.log(data);
+    
     if(data[0]!="Individuals"){
       data=JSON.parse(localStorage.getItem(data[0])!);
     }
     this.myLoading=true;
-    this.firewallsGetService.getPolicys(data,this.headers).subscribe((data)=>{
+    this.firewallsGetService.getPolicys(["Individuals","192.168.254.10"],this.headers).subscribe((data)=>{
       console.log(data);
       this.myLoading=false;  
     },(error)=>{
@@ -324,7 +315,7 @@ export class FirewallsComponent implements OnInit {
 
   getBackup(data:any){
     this.myLoading=true;
-    this.firewallsGetService.getBackup(data,()=> this.myLoading=false,this.headers);
+    this.firewallsGetService.getBackup(["Morocco_firewalls"],()=> this.myLoading=false,this.headers);
   }
 
 

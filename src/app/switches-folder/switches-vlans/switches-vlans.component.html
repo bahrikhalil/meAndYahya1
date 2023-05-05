@@ -1,4 +1,18 @@
-<table>
+
+ <mat-slide-toggle
+ class="example-margin"
+ [color]="color"
+ [checked]="checked"
+ [disabled]="disabled">
+Slide me!
+</mat-slide-toggle>
+<div *ngIf="!addingVlan && !assigningPortsToVlan">
+  <div>
+    <button class="btn btn-outline-success" type="button" (click)="addingVlan=!addingVlan">Add vlan</button>
+    <button class="btn btn-outline-success" type="button" (click)="assigningPortsToVlan=!assigningPortsToVlan">assign ports to Vlan</button>
+  </div>
+<br>
+<table >
 <thead>
     <tr>
       <th scope="col">id</th>
@@ -12,7 +26,87 @@
     <td>{{curr.name}}</td>
     <td>{{curr.status}} </td>
     <td>{{curr.ports}}</td>
+    <td><i class="fas fa-trash-alt pointer" (click)="onSaveDelVlan(curr)"></i></td>
+  </tr> 
+</table >
+</div>
+
+<!--------------------------------------------------- aVlan --------------------------------------------------------------->
+
+<div *ngIf="addingVlan && !assigningPortsToVlan"> 
+<form [formGroup]="formdata" class="vlan-form" >
+  <div class="form-group">
+    <label for="vlanId">VLAN ID:</label>
+    <input type="text" id="vlanId" formControlName="vlanId" class="form-control" />
+  </div>
+  <div class="form-group">
+    <label for="vlanName">VLAN Name:</label>
+    <input type="text" id="vlanName" formControlName="vlanName" class="form-control" />
+  </div>
+  <mat-selection-list id="hosts" formControlName="hosts">
+    <mat-list-option *ngFor="let host of hosts1" [value]="host">{{ host }}</mat-list-option>
+  </mat-selection-list>
+</form>
+<div >
+  <ng-multiselect-dropdown
+[placeholder]="'custom placeholder'"
+[settings]="dropdownSettings"
+[data]="dropdownList"
+[(ngModel)]="selectedItemsHosts"
+(onSelect)="onItemSelect($event)"
+(onSelectAll)="onSelectAll($event)"
+>
+</ng-multiselect-dropdown>
+</div>
+<div>
+<button type="submit" class="btn btn-primary" (click)="onSaveAddVlan(formdata.value)">Save</button>
+<button type="submit" class="btn btn-primary" (click)="addingVlan=!addingVlan">cancel</button>
+</div>
+</div>
+
+<!--------------------------------------------------- assignPortsToVlan --------------------------------------------------------------->
+
+
+<div *ngIf="assigningPortsToVlan">
   
-  </tr>
-  
-</table>
+  <form [formGroup]="formdata" class="vlan-form" >
+    <mat-form-field appearance="fill" >
+      <mat-label>Vlan</mat-label>
+      <mat-select formControlName="vlanId" >
+        <mat-option *ngFor="let  curr of currVlanInfo" [value]="curr.id">
+          {{curr.id}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <ng-multiselect-dropdown 
+    [placeholder]="'custom placeholder'"
+    [settings]="dropdownSettings"
+    [data]="dropdownListPorts"
+    [(ngModel)]="selectedItemsPorts"
+    (onSelect)="onItemSelect($event)"
+    (onSelectAll)="onSelectAll($event)"
+    [ngModelOptions]="{standalone: true}"
+    >
+    </ng-multiselect-dropdown>
+    <br>
+    <br>
+    <div >
+      <ng-multiselect-dropdown
+    [placeholder]="'custom placeholder'"
+    [settings]="dropdownSettings"
+    [data]="dropdownList"
+    [(ngModel)]="selectedItemsHosts"
+    (onSelect)="onItemSelect($event)"
+    (onSelectAll)="onSelectAll($event)"
+    [ngModelOptions]="{standalone: true}"
+    >
+    </ng-multiselect-dropdown>
+    </div>
+    <div>
+    <button type="submit" class="btn btn-primary" (click)="onSaveAssignIntToVlan(formdata.value)">Save</button>
+    <button type="submit" class="btn btn-primary" (click)="assigningPortsToVlan=!assigningPortsToVlan">cancel</button>
+    </div>
+    
+  </form>
+    
+  </div>

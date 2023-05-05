@@ -36,8 +36,8 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   
     this.formdata= new FormGroup({
-      email: new FormControl("bahri1@gmail.com"),
-      password: new FormControl("solomid123")
+      email: new FormControl("bahri"),
+      password: new FormControl("bahri123")
    });
    this.form= new FormGroup({
     email: new FormControl("foullen@gmail.com"),
@@ -64,8 +64,8 @@ export class LoginComponent implements OnInit {
     this.User.password=data.password;
     this.service.login(this.User,()=>{
       this.myLoading=false;
-    //  this.route.navigate(["../switchs"])
-    //  this.route.navigate(["../firewalls"])
+      this.route.navigate(["../switchs/topology/Morocco_switches"])
+    
     });
     
   }

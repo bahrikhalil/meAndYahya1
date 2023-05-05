@@ -1,2 +1,137 @@
+<div *ngIf="!addingACL && !deletingACL">
+<div style="display: flex;">
+<p>service tcp-keepalives-in</p>
+<mat-slide-toggle
+class="example-margin"
+[color]="color"
+[checked]="systemConfigParams['service tcp-keepalives-in']"
+[disabled]="disabled">
+</mat-slide-toggle>
+</div>
 
-<p>SYSTEEEEEEEEEEEEEM</p>
+<div>
+  <p>ip source-route</p>
+<mat-slide-toggle
+class="example-margin"
+[color]="color"
+[checked]="systemConfigParams['ip source-route']"
+[disabled]="disabled">
+
+</mat-slide-toggle>
+</div>
+
+<div>
+  <p>ip bootp server</p>
+<mat-slide-toggle
+class="example-margin"
+[color]="color"
+[checked]="systemConfigParams['ip bootp server']"
+[disabled]="disabled">
+Slide me!
+</mat-slide-toggle>
+</div>
+
+<div>
+  <p>ip dhcp bootp ignore</p>
+<mat-slide-toggle
+class="example-margin"
+[color]="color"
+[checked]="systemConfigParams['ip dhcp bootp ignore']"
+[disabled]="disabled">
+</mat-slide-toggle>
+</div>
+
+<button (click)="addingACL=!addingACL">add ACL</button>
+<button (click)="selectingACLRules=!selectingACLRules">delete ACL</button>
+
+<div [ngClass]="{ 'loading-wrapper': selectingACLRules }" >
+
+<table >
+    <tbody *ngFor="let entry of objectEntries(ACLs)">
+      <tr class="acl-header">{{entry[0]}}</tr>
+      <tr *ngFor="let item of entry[1]" (click)="selectRule(item.id,entry[0])" [ngClass]="{ 'row-selected': selectedRules.indexOf(item.id)!=-1 && entry[0]== selectedACLName}">  
+        <td >{{ item.id}}</td>   
+        <td >{{ item.protocol }}</td>
+        <td >{{ item.action}}</td>
+        <td >{{ item.srcAddress}}</td>
+        <td >{{ item.srcSubnet}}</td>
+        <td >{{ item.srcPort}}</td>       
+        <td >{{ item.dstAddress}}</td>  
+        <td >{{ item.dstSubnet}}</td>
+        <td >{{ item.dstPort}}</td>     
+        <td><i class="fas fa-trash-alt pointer" (click)="delACL(item.id,entry[0])"></i></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button *ngIf="selectingACLRules" (click)="delACL(selectedRules,selectedACLName)">submit</button>
+</div>
+</div>
+
+  <div *ngIf="addingACL && !deletingACL"> 
+    <form [formGroup]="formdata" class="vlan-form" >
+      <div class="form-group">
+        <label for="vlanId">aclName:</label>
+        <input type="text" id="vlanId" formControlName="aclName" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="vlanName">RuleId:</label>
+        <input type="text" id="vlanName" formControlName="aclRuleId" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="vlanName">action:</label>
+        <input type="text" id="vlanName" formControlName="action" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="vlanName">protocol:</label>
+        <input type="text" id="vlanName" formControlName="protocol" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="vlanName">srcAddress :</label>
+        <input type="text" id="vlanName" formControlName="srcAddress" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="vlanName">srcSubnet:</label>
+        <input type="text" id="vlanName" formControlName="srcSubnet" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="vlanName">srcPort:</label>
+        <input type="text" id="vlanName" formControlName="srcPort" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="vlanName">dstAddress:</label>
+        <input type="text" id="vlanName" formControlName="dstAddress" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="vlanName">dstSubnet:</label>
+        <input type="text" id="vlanName" formControlName="dstSubnet" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="vlanName">dstPort:</label>
+        <input type="text" id="vlanName" formControlName="dstPort" class="form-control" />
+      </div>
+    
+    </form>
+    <div >
+      <ng-multiselect-dropdown
+    [placeholder]="'custom placeholder'"
+    [settings]="dropdownSettings"
+    [data]="dropdownHostsList"
+    [(ngModel)]="selectedItemsHosts"
+    (onSelect)="onItemSelect($event)"
+    (onSelectAll)="onSelectAll($event)"
+    [ngModelOptions]="{standalone: true}"
+    >
+    </ng-multiselect-dropdown>
+    </div>
+    <div>
+    <button type="submit" class="btn btn-primary" (click)="addACL(formdata.value)">Save</button>
+    <button type="submit" class="btn btn-primary" (click)="addingACL=!addingACL">cancel</button>
+    </div>
+    </div>
+
+<div class="loading-wrapper" *ngIf="myLoading" >
+    <div *ngIf="myLoading" class="loading">
+      <mat-progress-spinner class="spinner-animation" color="primary" mode="indeterminate"></mat-progress-spinner>
+    </div>
+  </div>

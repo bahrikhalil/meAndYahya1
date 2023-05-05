@@ -86,7 +86,7 @@ export class SwitchesInterfacesComponent implements OnInit {
    });
    this.headers = new HttpHeaders({
     'user': localStorage.getItem("user")!,
-    Authorization: "Bearer "+ localStorage.getItem("usertoken"),
+    Authorization: "bearer "+ localStorage.getItem("usertoken"),
   });
 
    this.onHostClickShowInt(localStorage.getItem("currentHost")!);

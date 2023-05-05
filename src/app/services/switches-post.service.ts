@@ -26,14 +26,23 @@ public addDevice(data:any,headers:HttpHeaders):Observable<any>{
   );
 }
     
-   public addACL(data:any,callback: ()=> void,headers:HttpHeaders){
-    this.http.post(baseUrl+"/api/switchs/post/addACL",data,{'headers':headers}).subscribe( data=>{
-      console.log(data);
-      callback();
-    });
-    let hosts = JSON.parse(localStorage.getItem('hosts') || 'default value');
-    hosts.slice(1,hosts.length).map((item:String)=>localStorage.removeItem(item+" acls")!);
+   public addACL(data:any,headers:HttpHeaders){
+    return  this.http.post(baseUrl+"/api/switchs/post/addACL",data,{'headers':headers}).pipe(
+      map((output) =>{
+        return output;
+      })
+      );
+       
   }
+  
+  public delACL(data:any,headers:HttpHeaders){
+      
+    return this.http.post(baseUrl+"/api/switchs/post/delACL",data,{'headers':headers}).pipe(
+     map((output) =>{
+       return output;
+     })
+    );
+   }
   
     public addVlanInt(data:any,callback: ()=> void,headers:HttpHeaders){
       this.http.post(baseUrl+"/api/switchs/post/addVlanInt",data,{'headers':headers}).subscribe( data=>{
@@ -44,7 +53,7 @@ public addDevice(data:any,headers:HttpHeaders):Observable<any>{
         callback();
       }
       );
-      let hosts = JSON.parse(localStorage.getItem('hosts') || 'default value');
+      let hosts = JSON.parse(localStorage.getItem('hosts')!);
       hosts.slice(1,hosts.length).map((item:String)=>localStorage.removeItem(item+" IntInfo"));
     }
   
@@ -69,7 +78,7 @@ public addDevice(data:any,headers:HttpHeaders):Observable<any>{
         alert("there has been an error please try again");
         callback();
       });
-      let hosts = JSON.parse(localStorage.getItem('hosts') || 'default value');
+      let hosts = JSON.parse(localStorage.getItem('hosts')!);
       hosts.slice(1,hosts.length).map((item:String)=>localStorage.removeItem(item+" IntInfoMode"));
     }
     public addVlansToTrunk(data:any,callback: ()=> void,headers:HttpHeaders):any{
@@ -82,7 +91,7 @@ public addDevice(data:any,headers:HttpHeaders):Observable<any>{
         callback();
       }
        );
-      let hosts = JSON.parse(localStorage.getItem('hosts') || 'default value');
+      let hosts = JSON.parse(localStorage.getItem('hosts')!);
       hosts.slice(1,hosts.length).map((item:String)=>localStorage.removeItem(item+" IntInfoMode"));
     }
     public setBridgePriority(data:any,callback: ()=> void,headers:HttpHeaders):any{
@@ -104,7 +113,7 @@ public addDevice(data:any,headers:HttpHeaders):Observable<any>{
       callback();
     }
     );
-      let hosts = JSON.parse(localStorage.getItem('hosts') || 'default value');
+      let hosts = JSON.parse(localStorage.getItem('hosts')!);
       hosts.slice(1,hosts.length).map((item:String)=>localStorage.removeItem(item+" IntInfo"));
     }
     public ShutDownInt(data:any,callback: ()=> void,headers:HttpHeaders):any{
@@ -119,7 +128,7 @@ public addDevice(data:any,headers:HttpHeaders):Observable<any>{
       hosts.slice(1,hosts.length).map((item:String)=>localStorage.removeItem(item+" IntInfo"));
     }
     public saveToStartUpConfig(callback: ()=> void,headers:HttpHeaders){
-      let hosts = JSON.parse(localStorage.getItem('hosts') || 'default value');
+      let hosts = JSON.parse(localStorage.getItem('hosts')!);
       this.http.post(baseUrl+"/api/switchs/post/saveToStartUpConfig",{hosts},{'headers':headers}).subscribe( data=>{
         console.log(data);
         callback();
@@ -137,7 +146,7 @@ public addDevice(data:any,headers:HttpHeaders):Observable<any>{
         alert("there has been an error please try again");
         callback();
       });
-      let hosts = JSON.parse(localStorage.getItem('hosts') || 'default value');
+      let hosts = JSON.parse(localStorage.getItem('hosts')!);
       hosts.slice(1,hosts.length).map((item:String)=>localStorage.removeItem(item+" vlanInfo"));
     }
     public delVlan(data:any,callback: ()=> void,headers:HttpHeaders):any{
@@ -148,7 +157,7 @@ public addDevice(data:any,headers:HttpHeaders):Observable<any>{
         alert("there has been an error please try again");
         callback();
       });
-      let hosts = JSON.parse(localStorage.getItem('hosts') || 'default value');
+      let hosts = JSON.parse(localStorage.getItem('hosts')!);
       hosts.slice(1,hosts.length).map((item:String)=>localStorage.removeItem(item+" vlanInfo"));
     }
     public delVlanInt(data:any,callback: ()=> void,headers:HttpHeaders):any{
@@ -159,7 +168,7 @@ public addDevice(data:any,headers:HttpHeaders):Observable<any>{
         alert("there has been an error please try again");
         callback();
       });
-      let hosts = JSON.parse(localStorage.getItem('hosts') || 'default value');
+      let hosts = JSON.parse(localStorage.getItem('hosts')!);
       hosts.slice(1,hosts.length).map((item:String)=>localStorage.removeItem(item+" IntInfo"));
     }
 }

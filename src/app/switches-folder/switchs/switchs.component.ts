@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import {Router} from '@angular/router';
+import {NavigationEnd,Router} from '@angular/router';
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -17,6 +17,9 @@ import { SwitchesSystemConfComponent } from '../switches-system-conf/switches-sy
 import { ReportSwitchesComponent } from '../report-switches/report-switches.component';
 import { CreateReportSwitchesService } from '../../services/create-report-switches.service';
 import { vlan,vlanInt,trunk, VlanInfo, IntInfo } from '../../shared/switchs-models';
+import { filter } from 'rxjs/operators';
+
+
 
 
 interface Neighbors {
@@ -45,12 +48,12 @@ interface HostLists {
 
 export class SwitchsComponent implements OnInit {
 
-  
-  
-  isAccepted = false;
-  isDenied = false;
+
+  showFiller = true;
+  panelOpenState = false;
+
   itemSelected=false;
-  panelOpen = false;
+  expanded = true;
   myLoading= false;
   contentList=[0,0,0,0,0,0,0,0,0,0];
   individualsList:string[]=[];
@@ -60,7 +63,6 @@ export class SwitchsComponent implements OnInit {
   headers:any;
   sites:string[]=["Morocco_switchs","Tunisia_switchs"];
   siteHosts: HostLists={"Tunisia_switchs":[],"Morocco_switchs": [] }
-  currentSite:string="Morocco_switchs";
   alertObjList:alertObj[]=[];
   issue:IssueObjList = {};
   issuemap:IssueMap= {};
@@ -68,9 +70,11 @@ export class SwitchsComponent implements OnInit {
   vlanInfo:VlanInfo=new VlanInfo;
   currVlanInfo:VlanInfo[]=[];
   currIntInfo:IntInfo[]=[];
+  selectingHost=false;
+  subject:string="";
 
   constructor(private topologyService:NetworkTopologyService,
-    private route:Router,
+    private router:Router,
     private switchesGetService:SwitchesGetService,
     private switchesPostService:SwitchesPostService,
     private reportService:CreateReportSwitchesService
@@ -81,13 +85,23 @@ export class SwitchsComponent implements OnInit {
 
   ngOnInit(): void {
     
-  
+    
    this.headers = new HttpHeaders({
     'user': localStorage.getItem("user")!,
-    Authorization: "Bearer "+ localStorage.getItem("usertoken"),
+    Authorization: "bearer "+ localStorage.getItem("usertoken"),
   });
-  
-  
+   this.subject=this.router.url.split("/")[2]+"/"+this.router.url.split("/")[3];
+   this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd)
+  ).subscribe((event:any) => {
+    console.log('Current URL:', event.url);
+    this.selectingHost=!this.selectingHost;    
+      localStorage.setItem('subject',event.url.split("/")[2]+"/"+event.url.split("/")[3]);
+      this.subject=event.url.split("/")[2]+"/"+event.url.split("/")[3];
+      console.log(event.url);      
+   
+  });
+   
    
     Object.entries(this.siteHosts).forEach(([key,value])=>{     
       if(JSON.parse(localStorage.getItem(key)!)==null){   
@@ -96,38 +110,26 @@ export class SwitchsComponent implements OnInit {
             this.siteHosts[key]=data;
             this.siteHosts[key]= this.siteHosts[key].map(item => item.replace(/"/g, ''));
             localStorage.setItem(key,JSON.stringify(this.siteHosts[key]))
-            
+           // this.router.navigate(['/switchs/topology']);
           }, (error)=>{alert("there has been an error please try again")}
           );
           
         } 
         else this.siteHosts[key]=JSON.parse(localStorage.getItem(key)!);
+      //  this.router.navigate(['/switchs/topology']);
       });    
-      console.log(this.siteHosts);
+     
       
   }
 
  
 
 
-networkTopology(){
-  this.myLoading=true;
-  this.changeContent(1);
-  this.switchesGetService.getNeighbors(localStorage.getItem("currentSite")!,this.headers,()=>{}).subscribe((data)=>{
-  this.myLoading=false;
-  this.neigh=data;
-  this.topologyService.buildTopology(this.neigh); 
 
- },(error)=>{
-  this.myLoading=false;
-  alert("there has been an error please try again")
-}
- )   
-}
 
-getBackUp(data:any){
+getBackUp(){
   this.myLoading=true;
-  this.switchesGetService.getBackup(data,()=> this.myLoading=false,this.headers);
+  this.switchesGetService.getBackup([this.router.url.split("/")[3]],()=> this.myLoading=false,this.headers);
 }
 
 
@@ -138,13 +140,21 @@ getBackUp(data:any){
   //this.networkTopology()
   localStorage.setItem('currentSite',site);  
  }
- setCurrentHost(host:string,contentNum:number){
-  this.hosts=["Individuals",host];
-  localStorage.setItem('hosts', JSON.stringify(this.hosts));
-  localStorage.setItem('currentHost',host);  
-  console.log(this.hosts);
-  this.changeContent(contentNum);
- }
+selectSubject(subject:string){
+  
+  localStorage.setItem('subject',subject);
+  this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd)
+  ).subscribe((event:any) => {
+    console.log('Current URL:', event.url);
+    this.selectingHost=!this.selectingHost;    
+      localStorage.setItem('subject',event.url.split("/")[2]+"/"+event.url.split("/")[3]);
+      this.subject=event.url.split("/")[2]+"/"+event.url.split("/")[3];
+      console.log(event.url);      
+   
+  });
+  
+}
  showIndividuals(){
   this.hosts=["Individuals"];
   this.individualsList.map((item)=>{
@@ -160,7 +170,11 @@ getBackUp(data:any){
 
 }
 
-
+itemSelect(){
+  this.itemSelected=!this.itemSelected;
+  console.log(this.itemSelected);
+  
+}
 
  
 

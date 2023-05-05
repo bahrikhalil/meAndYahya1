@@ -1,0 +1,19 @@
+<div >
+    <table>
+      <thead>
+          <tr>
+            <th scope="col">chose a host</th>        
+          </tr>
+        </thead>
+        <tr *ngFor="let item of siteHosts[currentSite]">
+          <td (click)="returnSubjectContent(item)">{{item}}</td>         
+        </tr>     
+      </table>        
+  </div>
+
+  <div class="loading-wrapper" *ngIf="myLoading" >
+    <div *ngIf="myLoading" class="loading">
+      <mat-progress-spinner class="spinner-animation" color="primary" mode="indeterminate"></mat-progress-spinner>
+    </div>
+  </div>
+  <router-outlet ></router-outlet>

@@ -32,6 +32,13 @@ import { ReportSwitchesComponent } from './switches-folder/report-switches/repor
 import { ReportFirewallsComponent } from './firewalls-folder/report-firewalls/report-firewalls.component';
 import { FirewallsSystemConfComponent } from './firewalls-folder/firewalls-system-conf/firewalls-system-conf.component';
 
+import {MatRadioModule} from '@angular/material/radio';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule } from '@angular/material/select';
+
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { SelectingHostComponent } from './selecting-host/selecting-host.component';
+import { TopologyComponent } from './switches-folder/topology/topology.component';
 
 
 
@@ -43,11 +50,20 @@ import { FirewallsSystemConfComponent } from './firewalls-folder/firewalls-syste
     
        LoginComponent,
       ReportSwitchesComponent,
-    SwitchsComponent, FirewallsComponent, SwitchesVlansComponent, SwitchesInterfacesComponent, SwitchesSystemConfComponent, PolicysComponent, ServiceObjectsComponent, AddressObjectsComponent, ReportSwitchesComponent, ReportFirewallsComponent, FirewallsSystemConfComponent, 
+    SwitchsComponent, FirewallsComponent, SwitchesVlansComponent,
+     SwitchesInterfacesComponent, SwitchesSystemConfComponent,
+      PolicysComponent, ServiceObjectsComponent, AddressObjectsComponent,
+       ReportSwitchesComponent, ReportFirewallsComponent, FirewallsSystemConfComponent,
+        SelectingHostComponent,
+        TopologyComponent
   ],
   imports: [
     BrowserModule,
+    
     AppRoutingModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatRadioModule,
     HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
@@ -59,7 +75,7 @@ import { FirewallsSystemConfComponent } from './firewalls-folder/firewalls-syste
     MatListModule,
     MatSidenavModule,
     MatSlideToggleModule,
-  MatProgressSpinnerModule,
+  MatProgressSpinnerModule,NgMultiSelectDropDownModule.forRoot(),
   RouterModule.forRoot([])
 
   ],

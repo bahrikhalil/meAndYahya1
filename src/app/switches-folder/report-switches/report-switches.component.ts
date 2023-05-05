@@ -12,6 +12,7 @@ import { SwitchesGetService } from '../../services/switches-get.service';
 import { SwitchesPostService } from '../../services/switches-post.service';
 import { CreateReportSwitchesService } from '../../services/create-report-switches.service';
 import { vlan,vlanInt,trunk, VlanInfo, IntInfo } from '../../shared/switchs-models';
+import { MatIconModule } from '@angular/material/icon';
 
 interface Neighbors {
   [key: string]: string[];
@@ -67,21 +68,55 @@ export class ReportSwitchesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.createReport(this.hosts);
+    this.headers = new HttpHeaders({
+      'user': localStorage.getItem("user")!,
+      Authorization: "bearer "+ localStorage.getItem("usertoken"),
+    });
+    
+   this.createReport(this.hosts);
+   
+   
+   
   }
   createReport(data:any){
   
+    if(localStorage.getItem(this.route.url.split('/')[3]+ "alertObjList")==null){
     this.myLoading=true;
     this.reportService.createReport(data,this.headers).then((alertObjects)=>{
         console.log(alertObjects);
-        this.myLoading=false;     
+        this.alertObjList=alertObjects;   
+        localStorage.setItem(this.route.url.split('/')[3]+ "alertObjList",JSON.stringify(this.alertObjList));  
+        this.myLoading=false;   
         
     },(error)=>{
       this.myLoading=false;
       alert("there has been an error please try again")
+    })
     }
-    )
-  
+    else{
+      this.alertObjList=JSON.parse(localStorage.getItem(this.route.url.split('/')[3]+ "alertObjList")!);
+    }
    }
+
+   redirectToFix(subjectType:string){
+
+      console.log(this.route.url.split('/')[3]);
+      
+      if(subjectType=="system" || subjectType=="ACL"){
+       this.route.navigate(['switchs/switch-system'+'/'+this.route.url.split('/')[3]]).catch((error)=>{
+        console.log("error");
+        
+       });
+      }
+    
+      else if(subjectType='interface'){
+        this.route.navigate(['switchs/interfaces/'+'/'+this.route.url.split('/')[3]]).catch((error)=>{
+          console.log("error");
+          
+        });
+      }
+   }
+
+  
 
 }

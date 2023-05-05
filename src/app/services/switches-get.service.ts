@@ -21,6 +21,10 @@ interface IssueMap {
   [key: string]: string;
 }
 
+interface ACLList{
+  [key: string]: HostLists[];
+}
+
 
 interface HttpOptions {
   headers?: HttpHeaders;
@@ -85,7 +89,11 @@ public triggerGetVlans(data:String,headers:HttpHeaders):Observable<VlanInfo[]>{
  }
 
  public getNeighbors(hostListName:string,headers:HttpHeaders,callback: ()=> void):Observable<Neighbors>{
+  console.log(hostListName);
+  
    let hosts =JSON.parse(localStorage.getItem(hostListName)!);
+   console.log(hosts);
+   
   return this.http.post<Neighbors>(baseUrl+"/api/switchs/get/getNeighbors",{hosts},{'headers':headers}).pipe(
    map((data:Neighbors) =>{
      return data;
@@ -93,10 +101,10 @@ public triggerGetVlans(data:String,headers:HttpHeaders):Observable<VlanInfo[]>{
    })
   ) 
  }
- public getACL(data:any,headers:HttpHeaders):Observable<IssueMap>{
+ public getACL(data:any,headers:HttpHeaders):Observable<ACLList>{
       
-  return this.http.post<IssueMap>(baseUrl+"/api/switchs/get/getACL",{"hosts":data},{'headers':headers}).pipe(
-   map((output:IssueMap) =>{
+  return this.http.post<ACLList>(baseUrl+"/api/switchs/get/getACL",{"hosts":data},{'headers':headers}).pipe(
+   map((output:ACLList) =>{
      return output;
    })
   );
@@ -107,7 +115,8 @@ public triggerGetVlans(data:String,headers:HttpHeaders):Observable<VlanInfo[]>{
  
   const fileName = data[0]+'_backup';
   let hosts = JSON.parse(localStorage.getItem('hosts')!);
-
+   console.log(data);
+   
 
   if(data[0]=="Individuals"){
    console.log("this is if -------------");

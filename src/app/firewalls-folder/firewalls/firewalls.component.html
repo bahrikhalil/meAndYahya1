@@ -7,42 +7,7 @@
           <a mat-button class="but" routerLink="/switchs">Switches</a>
           <a mat-button class="but" routerLink="/firewalls">Firewalls</a>
         </mat-toolbar>  
-        <form *ngIf="contentList[0]==1">
-          <div>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-          </div>
-         
-          <button type="submit">Submit</button>
-        </form>
-
-
-        <form *ngIf="contentList[1]==1">
-          <div>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-          </div>
-          <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-          </div>
-          <div>
-            <label for="status">Status:</label>
-            <div class="switch-container">
-              <span>Off</span>
-              <mat-slide-toggle name="status"></mat-slide-toggle>
-              <span>On</span>
-            </div>
-          </div>
-          <div>
-            <label for="action">Action:</label>
-            <div class="action-container">
-              <button type="button" class="accept" (click)="onAcceptClick()">Accept</button>
-              <button type="button" class="deny" (click)="onDenyClick()">Deny</button>
-            </div>
-          </div>
-          <button type="submit">Submit</button>
-        </form>
+        
       
         <div class="loading-wrapper" *ngIf="myLoading" >
           <div *ngIf="myLoading" class="loading">
